@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DutchExam.online — Quick Level Test (~5 min)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8fafc; --paper:#ffffff; --text:#0f172a; --muted:#475569; --line:#e2e8f0;
+    --blue:#2563eb; --blue-2:#3b82f6; --blue-50:#eff6ff;
+    --yellow:#f59e0b; --yellow-2:#fde68a; --yellow-50:#fffbeb;
+    --ok:#16a34a; --bad:#ef4444;
+    --radius:18px; --shadow:0 16px 40px rgba(2,6,23,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif; color:var(--text);
+    background:
+      radial-gradient(1200px 700px at 8% -10%, #eef2ff 0%, transparent 60%),
+      radial-gradient(1200px 700px at 92% 0%, #fff7cc 0%, transparent 60%),
+      var(--bg);
+  }
+  .wrap{max-width:1200px; margin:0 auto; padding:22px 16px 80px}
+  .grid{display:grid; grid-template-columns:300px 1fr; gap:18px}
+  @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+
+  /* SIDEBAR */
+  .side{
+    position:sticky; top:16px;
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:18px;
+  }
+  .side h3{margin:6px 0 8px; font-size:1.1rem}
+  .side .pill{display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; font-size:.9rem}
+  .pill-blue{background:var(--blue-50); color:var(--blue); border:1px solid #bfdbfe}
+  .pill-yellow{background:var(--yellow-50); color:#8d5c00; border:1px solid #fde68a}
+  .kv{display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; margin:8px 0}
+  .val{font-weight:800}
+  .barwrap{height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0}
+  .bar{height:100%; width:0%; background:linear-gradient(90deg,#34d399,#22c55e); transition:width .25s ease}
+
+  /* MAIN */
+  .card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:22px; margin-bottom:18px;
+  }
+  h1{font-size: clamp(1.8rem, 1.6rem + 1.8vw, 2.6rem); margin:4px 0 6px; letter-spacing:-.02em}
+  p.lead{color:var(--muted); margin:0 0 10px}
+  .progress{height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0 16px}
+  .progress .pbar{height:100%; width:0%; background:linear-gradient(90deg, var(--blue-2), var(--blue)); transition:width .25s ease}
+
+  .qtitle{font-weight:800; margin:2px 0 8px}
+  .qmeta{color:var(--muted); font-size:.95rem; margin-bottom:6px}
+
+  .input{
+    display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:12px;
+    background:#fff; border:1px solid var(--line);
+  }
+  .input input{flex:1; border:0; outline:0; background:transparent; font-size:1rem; color:var(--text)}
+  .opts{display:grid; gap:10px; margin-top:12px}
+  .opt{
+    border:1px solid var(--line); background:#fff; padding:12px 14px; border-radius:12px; cursor:pointer; text-align:left;
+    transition: border-color .15s ease, background .15s ease, transform .08s ease, box-shadow .15s ease;
+  }
+  .opt:hover{transform:translateY(-1px); border-color:#bfdbfe; box-shadow:0 8px 18px rgba(2,6,23,.06)}
+  .opt.correct{outline:2px solid var(--ok); background:#f0fdf4}
+  .opt.wrong{outline:2px solid var(--bad); background:#fef2f2}
+
+  .tokens, .slots{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+  .token, .slot{
+    user-select:none;
+    border:1px dashed #bfdcff; background:var(--blue-50); color:var(--blue);
+    padding:8px 10px; border-radius:10px; cursor:pointer; min-width:44px; text-align:center; font-weight:700;
+  }
+  .slot{ background:#fff; border:1px dashed #94a3b8; color:#64748b }
+  .slot.filled{border-style:solid}
+  .token.dragging{opacity:.6}
+
+  .btns{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px}
+  .btn{
+    appearance:none; border:0; border-radius:12px; cursor:pointer; padding:12px 16px; font-weight:800;
+    transition: transform .16s ease, box-shadow .2s ease, filter .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .primary{color:#fff; background:linear-gradient(180deg,var(--blue-2),var(--blue)); box-shadow:0 10px 24px rgba(37,99,235,.22)}
+  .secondary{background:linear-gradient(180deg,var(--yellow-2),var(--yellow)); color:#0f172a; box-shadow:0 10px 24px rgba(245,158,11,.22)}
+  .ghost{background:#fff; border:1px solid var(--line); color:var(--text)}
+  .status{font-weight:700; margin-top:6px}
+  .ok{color:var(--ok)} .bad{color:var(--bad)}
+  .muted{color:var(--muted)}
+
+  .result{display:none}
+  .center{text-align:center}
+
+  /* header mini-nav */
+  .topnav{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+  .brand{font-weight:800}
+  .topnav a{color:var(--blue); text-decoration:none; font-weight:700}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topnav">
+      <div class="brand">DutchExam.online</div>
+      <div><a href="index.html">← Back</a> • <a href="tests.html">All tests</a></div>
+    </div>
+
+    <div class="grid">
+      <!-- SIDEBAR -->
+      <aside class="side" id="sidebar">
+        <h3>Текущий уровень</h3>
+        <div id="levelBadge" class="pill pill-blue">—</div>
+
+        <div class="kv">
+          <div>Точность</div>
+          <div class="val"><span id="accVal">—</span></div>
+        </div>
+        <div class="barwrap"><div id="accBar" class="bar" style="width:0%"></div></div>
+
+        <div class="kv">
+          <div>Баллов</div>
+          <div class="val"><span id="pointsVal">0</span></div>
+        </div>
+
+        <div class="kv">
+          <div>Вопрос</div>
+          <div class="val"><span id="qpos">1</span>/<span id="qtotal">10</span></div>
+        </div>
+
+        <div class="pill pill-yellow" style="margin-top:10px">Quick ~5 min</div>
+        <p class="muted" style="margin-top:10px">Complete the sentences. Some tasks use drag-and-drop or a short typed answer.</p>
+      </aside>
+
+      <!-- MAIN -->
+      <main>
+        <section class="card">
+          <h1>Quick Dutch level test</h1>
+          <p class="lead">Complete the sentence or choose the best option. We’ll estimate your level as you go.</p>
+          <div class="progress"><div id="pbar" class="pbar"></div></div>
+          <div class="qmeta" id="qmeta"></div>
+          <div class="qtitle" id="qtitle"></div>
+
+          <!-- dynamic question host -->
+          <div id="qhost"></div>
+
+          <div class="status" id="status"></div>
+
+          <div class="btns">
+            <button id="checkBtn" class="btn primary">Check</button>
+            <button id="nextBtn" class="btn ghost" disabled>Next</button>
+            <button id="skipBtn" class="btn ghost">Skip</button>
+            <button id="restartBtn" class="btn secondary" style="margin-left:auto">Restart</button>
+          </div>
+        </section>
+
+        <!-- RESULT -->
+        <section class="card result" id="resultCard">
+          <h2 class="center">Your quick test result</h2>
+          <p class="center"><strong>Score:</strong> <span id="finalPoints">0</span> / <span id="finalTotal">0</span> •
+            <strong>Accuracy:</strong> <span id="finalAcc">0%</span></p>
+          <p class="center"><strong>Estimated level:</strong> <span id="finalLevel">—</span></p>
+          <div class="center btns" style="justify-content:center">
+            <a class="btn primary" href="tests.html">Choose another test</a>
+            <button class="btn ghost" id="againBtn">Retake this test</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+<script>
+/** ====== DATA ====== */
+const QUESTIONS = [
+  // 1 input
+  {
+    type: 'input',
+    prompt: 'Complete: Ik ___ in Amsterdam.',
+    answer: ['woon'],
+    help: 'Present tense: ik woon (no -t).',
+  },
+  // 2 mc
+  {
+    type: 'mc',
+    prompt: 'Choose the correct word: U moet hier ___.',
+    options: ['wachten', 'wacht', 'wachtte'],
+    correctIndex: 0,
+    help: 'With “moet”, use the infinitive: wachten.',
+  },
+  // 3 input
+  {
+    type: 'input',
+    prompt: 'Complete: Morgen ___ we naar de markt.',
+    answer: ['gaan'],
+    help: 'We go = wij/ we gaan.',
+  },
+  // 4 mc
+  {
+    type: 'mc',
+    prompt: 'Wat is de juiste reactie? — “Dank u wel!” — ___',
+    options: ['Tot ziens!', 'Graag gedaan!', 'Goedemorgen!'],
+    correctIndex: 1,
+    help: '“Dank u wel” → “Graag gedaan!”.',
+  },
+  // 5 drag
+  {
+    type: 'dnd',
+    prompt: 'Zet de woorden in de juiste volgorde:',
+    words: ['De','winkel','is','op','zondag','gesloten.'],
+  },
+  // 6 input
+  {
+    type: 'input',
+    prompt: 'Vul in: Ik heb ___ afspraak bij de huisarts.',
+    answer: ['een'],
+    help: '“een afspraak” = an appointment.',
+  },
+  // 7 mc
+  {
+    type: 'mc',
+    prompt: 'Kies de juiste zin.',
+    options: ['Ik ben te laat worden.', 'Ik kom te laat.', 'Ik laat te kom.'],
+    correctIndex: 1,
+    help: 'Correct form: “Ik kom te laat.”',
+  },
+  // 8 drag
+  {
+    type: 'dnd',
+    prompt: 'Maak de vraag:',
+    words: ['Mag','ik','met','pin','betalen?'],
+  },
+  // 9 input
+  {
+    type: 'input',
+    prompt: 'Vul in: Hoe ___ het met u?',
+    answer: ['gaat'],
+    help: 'Hoe gaat het met u?',
+  },
+  // 10 mc
+  {
+    type: 'mc',
+    prompt: 'U wilt hulp. Wat zegt u?',
+    options: ['Ik wil graag hulp.', 'Ik niets.', 'Ik boos.'],
+    correctIndex: 0,
+    help: 'Polite request: “Ik wil graag hulp.”',
+  },
+];
+
+const TOTAL = QUESTIONS.length;
+
+/** ====== STATE ====== */
+let idx = 0;
+let correct = 0;
+let attempted = 0;
+let checked = false; // current question graded
+let dndState = null; // for drag-n-drop
+
+/** ====== DOM ====== */
+const qmeta = document.getElementById('qmeta');
+const qtitle = document.getElementById('qtitle');
+const qhost = document.getElementById('qhost');
+const statusEl = document.getElementById('status');
+const checkBtn = document.getElementById('checkBtn');
+const nextBtn = document.getElementById('nextBtn');
+const skipBtn = document.getElementById('skipBtn');
+const restartBtn = document.getElementById('restartBtn');
+const resultCard = document.getElementById('resultCard');
+const pbar = document.getElementById('pbar');
+
+/** Sidebar */
+const accVal = document.getElementById('accVal');
+const accBar = document.getElementById('accBar');
+const pointsVal = document.getElementById('pointsVal');
+const qpos = document.getElementById('qpos');
+const qtotal = document.getElementById('qtotal');
+const levelBadge = document.getElementById('levelBadge');
+
+/** Final */
+const finalPoints = document.getElementById('finalPoints');
+const finalTotal = document.getElementById('finalTotal');
+const finalAcc = document.getElementById('finalAcc');
+const finalLevel = document.getElementById('finalLevel');
+const againBtn = document.getElementById('againBtn');
+
+qtotal.textContent = TOTAL;
+
+/** ====== RENDER ====== */
+function render() {
+  resultCard.style.display = 'none';
+  qhost.innerHTML = '';
+  statusEl.textContent = '';
+  statusEl.className = 'status';
+  checked = false;
+
+  const q = QUESTIONS[idx];
+  qmeta.textContent = `Question ${idx+1} of ${TOTAL}`;
+  qtitle.textContent = q.prompt;
+
+  // progress
+  pbar.style.width = `${(idx)/TOTAL*100}%`;
+  qpos.textContent = idx+1;
+
+  // build UI
+  if (q.type === 'input') {
+    const box = document.createElement('div');
+    box.className = 'input';
+    box.innerHTML = `<input id="answerInput" type="text" placeholder="Type your answer…" autocomplete="off">`;
+    qhost.appendChild(box);
+  }
+  else if (q.type === 'mc') {
+    const opts = document.createElement('div');
+    opts.className = 'opts';
+    q.options.forEach((optText, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.textContent = optText;
+      b.addEventListener('click', () => {
+        if (checked) return;
+        // mark selection
+        document.querySelectorAll('.opt').forEach(o => o.dataset.sel = '0');
+        b.dataset.sel = '1';
+        // visual focus
+        document.querySelectorAll('.opt').forEach(o => o.style.outline = '');
+        b.style.outline = '2px solid #bfdbfe';
+      });
+      opts.appendChild(b);
+    });
+    qhost.appendChild(opts);
+  }
+  else if (q.type === 'dnd') {
+    dndState = { slots: [], pool: [] };
+    const instr = document.createElement('div');
+    instr.className = 'muted';
+    instr.textContent = 'Drag or click words into the blanks in correct order.';
+    qhost.appendChild(instr);
+
+    const slots = document.createElement('div');
+    slots.className = 'slots';
+    q.words.forEach(() => {
+      const s = document.createElement('button');
+      s.type = 'button';
+      s.className = 'slot';
+      s.addEventListener('click', () => {
+        // return word to pool
+        if (s.textContent.trim() !== '') {
+          const token = createToken(s.textContent);
+          pool.appendChild(token);
+          s.textContent = '';
+          s.classList.remove('filled');
+        }
+      });
+      slots.appendChild(s);
+      dndState.slots.push(s);
+    });
+    qhost.appendChild(slots);
+
+    const pool = document.createElement('div');
+    pool.className = 'tokens';
+    // shuffle words
+    const shuffled = [...q.words].sort(() => Math.random()-0.5);
+    shuffled.forEach(w => pool.appendChild(createToken(w)));
+    qhost.appendChild(pool);
+
+    // helpers
+    function createToken(text){
+      const t = document.createElement('button');
+      t.type = 'button';
+      t.className = 'token';
+      t.textContent = text;
+
+      // click-to-insert
+      t.addEventListener('click', () => {
+        const slot = dndState.slots.find(s => s.textContent.trim() === '');
+        if (slot){
+          slot.textContent = text;
+          slot.classList.add('filled');
+          t.remove();
+        }
+      });
+
+      // drag support
+      t.draggable = true;
+      t.addEventListener('dragstart', () => t.classList.add('dragging'));
+      t.addEventListener('dragend', () => t.classList.remove('dragging'));
+
+      dndState.pool = pool;
+      // droppable slots
+      dndState.slots.forEach(s => {
+        s.addEventListener('dragover', (e) => e.preventDefault());
+        s.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const drag = document.querySelector('.token.dragging');
+          if (!drag) return;
+          if (s.textContent.trim() === ''){
+            s.textContent = drag.textContent;
+            s.classList.add('filled');
+            drag.remove();
+          }
+        });
+      });
+
+      return t;
+    }
+  }
+
+  // buttons
+  nextBtn.disabled = true;
+}
+
+/** ====== CHECK / SCORE ====== */
+function normalize(s){ return s.trim().toLowerCase().replace(/\s+/g,' '); }
+
+function checkCurrent() {
+  if (checked) return;
+  const q = QUESTIONS[idx];
+  let isCorrect = false;
+
+  if (q.type === 'input') {
+    const v = document.getElementById('answerInput').value || '';
+    if (!v.trim()){
+      statusEl.textContent = 'Type your answer first.';
+      statusEl.className = 'status';
+      return;
+    }
+    isCorrect = q.answer.map(a => normalize(a)).includes(normalize(v));
+  }
+  else if (q.type === 'mc') {
+    const opts = Array.from(document.querySelectorAll('.opt'));
+    const selIndex = opts.findIndex(o => o.dataset.sel === '1');
+    if (selIndex === -1){
+      statusEl.textContent = 'Choose an option first.';
+      statusEl.className = 'status';
+      return;
+    }
+    isCorrect = (selIndex === q.correctIndex);
+    // reveal
+    opts.forEach((o,i) => {
+      if (i === q.correctIndex) o.classList.add('correct');
+      if (i === selIndex && !isCorrect) o.classList.add('wrong');
+      o.disabled = true;
+    });
+  }
+  else if (q.type === 'dnd') {
+    const filled = dndState.slots.every(s => s.textContent.trim() !== '');
+    if (!filled){
+      statusEl.textContent = 'Fill all blanks first.';
+      statusEl.className = 'status';
+      return;
+    }
+    const current = dndState.slots.map(s => s.textContent);
+    isCorrect = current.join(' ') === QUESTIONS[idx].words.join(' ');
+    // color feedback
+    dndState.slots.forEach((s,i) => {
+      const ok = s.textContent === QUESTIONS[idx].words[i];
+      s.style.outline = ok ? '2px solid #16a34a' : '2px solid #ef4444';
+    });
+  }
+
+  attempted++;
+  if (isCorrect) {
+    correct++;
+    statusEl.textContent = 'Correct!';
+    statusEl.className = 'status ok';
+  } else {
+    statusEl.textContent = 'Not quite.' + (QUESTIONS[idx].help ? ' ' + QUESTIONS[idx].help : '');
+    statusEl.className = 'status bad';
+  }
+  checked = true;
+  nextBtn.disabled = false;
+
+  // update sidebar
+  updateMeters();
+}
+
+function updateMeters(){
+  const acc = attempted ? Math.round((correct/attempted)*100) : 0;
+  accVal.textContent = attempted ? acc + '%' : '—';
+  accBar.style.width = attempted ? acc + '%' : '0%';
+  pointsVal.textContent = String(correct);
+
+  // level estimate (CEFR-ish)
+  const lvl = estimateLevel(acc, attempted);
+  levelBadge.textContent = lvl;
+  levelBadge.className = 'pill ' + (lvl.startsWith('A') ? 'pill-blue' : 'pill-yellow');
+}
+
+function estimateLevel(acc, attempts){
+  if (attempts < 3) return '—';
+  if (acc < 35) return 'A1 Beginner';
+  if (acc < 65) return 'A2 Pre-Intermediate';
+  if (acc < 85) return 'B1 Intermediate';
+  return 'B2 Upper-Intermediate';
+}
+
+/** ====== NAV ====== */
+function nextQuestion(){
+  if (!checked) return;
+  if (idx < TOTAL - 1){
+    idx++;
+    render();
+  } else {
+    finish();
+  }
+}
+
+function skipQuestion(){
+  if (!checked) { attempted++; } // count as attempted if skipped before checking
+  checked = true;
+  nextQuestion();
+}
+
+function restart(){
+  idx = 0; correct = 0; attempted = 0; checked = false;
+  resultCard.style.display = 'none';
+  updateMeters();
+  render();
+}
+
+function finish(){
+  // fill progress
+  pbar.style.width = '100%';
+  // final
+  finalPoints.textContent = correct;
+  finalTotal.textContent = TOTAL;
+  const acc = attempted ? Math.round((correct/attempted)*100) : 0;
+  finalAcc.textContent = acc + '%';
+  finalLevel.textContent = estimateLevel(acc, attempted);
+  resultCard.style.display = 'block';
+  // scroll
+  resultCard.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/** ====== WIRE ====== */
+checkBtn.addEventListener('click', checkCurrent);
+nextBtn.addEventListener('click', nextQuestion);
+skipBtn.addEventListener('click', skipQuestion);
+restartBtn.addEventListener('click', restart);
+againBtn.addEventListener('click', restart);
+
+/** init */
+updateMeters();
+render();
+</script>
+</body>
+</html>
