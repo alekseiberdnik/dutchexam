@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DutchExam.online - Prepare for Your Inburgering Exam</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset & Fonts */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #4f46e5, #3b82f6); color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+    
+    /* Hero Section */
+    h1 { font-size: 3rem; margin-bottom: 20px; line-height: 1.2; }
+    p { font-size: 1.2rem; margin-bottom: 30px; color: #e0e7ff; }
+    
+    /* Form */
+    form { display: flex; flex-direction: column; align-items: center; gap: 15px; width: 100%; max-width: 400px; }
+    input[type="email"] { padding: 15px; width: 100%; border-radius: 8px; border: none; font-size: 1rem; }
+    button { padding: 15px 30px; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; background: #facc15; color: #111827; transition: all 0.3s ease; }
+    button:hover { background: #eab308; transform: translateY(-3px); }
+    
+    /* Footer */
+    footer { margin-top: 50px; font-size: 0.9rem; color: #d1d5db; }
+    
+    /* Responsive */
+    @media(max-width: 500px) {
+      h1 { font-size: 2.2rem; }
+      p { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to DutchExam.online 🇳🇱</h1>
+  <p>Prepare for your Inburgering exam online with practice tests and exercises. Get early access now!</p>
+  
+  <form name="subscribe" method="POST" data-netlify="true" onsubmit="return validateEmail()">
+    <input type="email" name="email" id="email" placeholder="Enter your email" required />
+    <button type="submit">Notify Me</button>
+  </form>
+
+  <footer>
+    &copy; 2025 DutchExam.online. All rights reserved.
+  </footer>
+
+  <script>
+    function validateEmail() {
+      const email = document.getElementById('email').value;
+      const re = /\S+@\S+\.\S+/;
+      if (!re.test(email)) {
+        alert('Please enter a valid email address.');
+        return false;
+      }
+      alert('Thank you! You are now signed up.');
+      return true;
+    }
+  </script>
+</body>
+</html>
