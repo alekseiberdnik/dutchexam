@@ -1,457 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <link rel="stylesheet" href="assets/brand.css"/>
- <link rel="stylesheet" href="assets/tests.css"/>
- <link rel="stylesheet" href="assets/progress.css"/>
- <meta charset="UTF-8"/>
- <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
- <title>DutchExam.online — Inburgering Prep</title>
- <link rel="preconnect" href="https://fonts.googleapis.com">
- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
- <style>
- :root{
- --bg:#f8fafc; --paper:#ffffff; --text:#0f172a; --muted:#475569;
- --line:#e2e8f0;
- --blue:#2563eb; --blue-2:#3b82f6; --blue-50:#eff6ff;
- --yellow:#f59e0b; --yellow-2:#fde68a; --yellow-50:#fffbeb;
- --ok:#16a34a; --bad:#ef4444;
- --shadow:0 16px 40px rgba(2,6,23,.08); --radius:20px; --pad:42px;
- }
- *{box-sizing:border-box}
- html,body{height:100%}
- body{
- margin:0; font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif; color:var(--text);
- background:
- radial-gradient(1200px 700px at 8% -10%, #eef2ff 0%, transparent 60%),
- radial-gradient(1200px 700px at 92% 0%, #fff7cc 0%, transparent 60%),
- var(--bg);
- }
- .wrap{max-width:1180px; margin:0 auto; padding:32px 20px 120px}
- .section{
- background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
- padding:var(--pad); box-shadow:var(--shadow); margin:28px 0;
- }
- @media (max-width:720px){ .section{padding:26px} }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DutchExam.online — Inburgering prep & level tests</title>
+  <meta name="description" content="Prepare for the Dutch Inburgering exam. Take adaptive skill tests (Lezen, Luisteren, Spreken, Schrijven, KNM) and a free In‑Depth level test. Study plans with results guarantee."/>
 
- /* Typography */
- h1{font-weight:800; letter-spacing:-.02em; line-height:1.06;
- font-size: clamp(2rem, 2.8vw + 1rem, 3.6rem); margin:0 0 10px}
- h2{font-weight:800; font-size: clamp(1.6rem, .9vw + 1.2rem, 2rem); margin:0 0 12px}
- p.lead{font-size: clamp(1.05rem, .6vw + .9rem, 1.25rem); color:var(--muted); margin:0}
- .eyebrow{
- display:inline-flex; gap:10px; align-items:center; font-weight:700;
- color:#0b1e6b; background:linear-gradient(90deg, var(--yellow-50), var(--blue-50));
- border:1px solid #bfdbfe; padding:8px 12px; border-radius:999px
- }
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y4884MKS1T"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-Y4884MKS1T');
+    // Simple helper used across the site
+    function DE_track(name, params){ try{ gtag('event', name, params||{}); }catch(e){} }
+  </script>
 
- /* Buttons */
- .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
- .btn{
- appearance:none; border:0; border-radius:14px; cursor:pointer;
- padding:14px 18px; font-weight:800; font-size:1.05rem;
- transition:transform .16s ease, box-shadow .2s ease, filter .2s ease;
- }
- .btn:hover{transform:translateY(-2px); filter:saturate(110%)}
- .btn.primary{
- color:#fff; background:linear-gradient(180deg,var(--blue-2),var(--blue));
- box-shadow:0 10px 26px rgba(37,99,235,.22);
- }
- .btn.secondary{
- background:linear-gradient(180deg,var(--yellow-2),var(--yellow)); color:#0f172a;
- box-shadow:0 10px 26px rgba(245,158,11,.22);
- }
- .btn[disabled]{opacity:.6; cursor:not-allowed}
+  <style>
+    :root{
+      --bg:#ffffff;
+      --surface:#ffffff;
+      --text:#0b1220;
+      --muted:#475569;
+      --line:rgba(2,6,23,.10);
+      --brandA:#3b82f6; /* blue */
+      --brandB:#f59e0b; /* orange/yellow */
+      --brandY:#fde047; /* pastel yellow */
+      --radius:18px;
+      --shadow:0 12px 28px rgba(2,6,23,.08);
+      --space:clamp(16px,3.2vw,28px);
+    }
+    /* Keep a crisp light theme; respect system but keep backgrounds bright */
+    @media (prefers-color-scheme: dark){
+      :root{ --bg:#0b1220; --surface:#0f172a; --text:#e5e7eb; --muted:#94a3b8; --line:rgba(148,163,184,.25); --shadow:0 12px 28px rgba(0,0,0,.35); }
+      .hero .title, .eyebrow { color:#fff; }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text); background:var(--bg);
+      line-height:1.45;
+    }
+    a{color:var(--brandA); text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1120px; margin:0 auto; padding:0 var(--space)}
+    .btn{appearance:none; border:0; border-radius:14px; cursor:pointer; padding:12px 16px; font-weight:800; display:inline-flex; align-items:center; gap:8px; text-decoration:none}
+    .btn.primary{color:#0b1220; background:linear-gradient(180deg, var(--brandY), var(--brandB))}
+    .btn.secondary{color:#fff; background:linear-gradient(180deg, #93c5fd, var(--brandA))}
+    .btn.ghost{color:var(--text); background:rgba(2,6,23,.04); border:1px solid var(--line)}
+    .chip{display:inline-flex; gap:8px; align-items:center; font-weight:700; color:#0b1e6b; background:linear-gradient(90deg, rgba(253,224,71,.25), rgba(59,130,246,.2)); border:1px solid rgba(191,219,254,.4); padding:6px 10px; border-radius:999px}
+    .card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px}
+    .muted{color:var(--muted)}
+    .lead{font-size:clamp(18px,2.2vw,20px); color:var(--muted)}
 
- /* Layout helpers */
- .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
- @media (max-width:900px){ .grid-2{grid-template-columns:1fr} }
+    /* Top navigation */
+    .topnav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(120%) blur(6px); background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.6)); border-bottom:1px solid var(--line)}
+    @media (prefers-color-scheme: dark){
+      .topnav{ background:linear-gradient(180deg, rgba(15,23,42,.85), rgba(15,23,42,.6)); }
+    }
+    .topnav .inner{display:flex; align-items:center; justify-content:space-between; padding:12px 0}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900}
+    .brand .dot{width:10px; height:10px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #fff, var(--brandA)); box-shadow:0 0 0 4px rgba(59,130,246,.2)}
+    .navlinks{display:flex; gap:10px; flex-wrap:wrap}
+    .navlinks a{padding:8px 10px; border-radius:10px}
+    .navlinks a:hover{background:rgba(2,6,23,.05)}
+    @media(max-width:900px){ .navlinks{display:none} }
 
- /* Quiz */
- .qcard{border:1px solid var(--line); border-radius:16px; padding:16px; background:#fff; margin:14px 0; box-shadow:var(--shadow)}
- .opts{display:grid; gap:10px; margin-top:12px}
- .opt{
- border:1px solid var(--line); background:#fff; padding:12px 14px; border-radius:12px; cursor:pointer; text-align:left;
- transition: border-color .15s ease, background .15s ease, transform .08s ease, box-shadow .15s ease;
- }
- .opt:hover{transform:translateY(-1px); border-color:#bfdbfe; box-shadow:0 8px 18px rgba(2,6,23,.06)}
- .opt.correct{outline:2px solid var(--ok); background:#f0fdf4}
- .opt.wrong{outline:2px solid var(--bad); background:#fef2f2}
- .progress{height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0 14px}
- .bar{height:100%; width:0%; background:linear-gradient(90deg,#34d399,#22c55e); transition:width .25s ease}
- .status{font-weight:700}
- .status.ok{color:var(--ok)} .status.bad{color:var(--bad)}
- .muted{color:var(--muted); font-size:.95rem}
+    /* Hero */
+    .hero{
+      position:relative; overflow:hidden; border-bottom:1px solid var(--line);
+      background:
+        radial-gradient(1200px 400px at 20% -10%, rgba(147,197,253,.35), transparent 60%),
+        radial-gradient(1000px 400px at 80% -20%, rgba(253,224,71,.30), transparent 60%);
+    }
+    .hero .inner{display:grid; grid-template-columns: 1.2fr 1fr; gap:24px; padding:calc(var(--space)*2) 0 var(--space)}
+    @media(max-width:980px){ .hero .inner{ grid-template-columns:1fr; padding:calc(var(--space)*1.3) 0 var(--space)} }
+    .title{font-size:clamp(32px,5vw,54px); line-height:1.05; margin:10px 0 16px; font-weight:900}
+    .hero figure{align-self:center; justify-self:center; width:min(480px, 95%); aspect-ratio:1.1/1; border-radius:24px; border:1px solid var(--line); box-shadow:var(--shadow);
+      background: conic-gradient(from 180deg at 50% 50%, rgba(253,224,71,.35), rgba(59,130,246,.25), rgba(253,224,71,.35));
+      animation:spin 14s linear infinite; position:relative; overflow:hidden
+    }
+    .hero figure::after{content:""; position:absolute; inset:6px; border-radius:20px; background:linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.65)); border:1px solid var(--line)}
+    @keyframes spin { to{ transform:rotate(360deg) } }
+    .cta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
 
- /* Form */
- form{display:flex; flex-direction:column; gap:12px}
- .input{
- display:flex; align-items:center; gap:10px; padding:14px 16px; border-radius:14px; background:#fff; border:1px solid var(--line);
- transition:border-color .15s ease, box-shadow .15s ease;
- }
- .input:focus-within{border-color:#bfdbfe; box-shadow:0 8px 18px rgba(2,6,23,.06)}
- .input input{flex:1; border:0; outline:0; background:transparent; color:var(--text); font-size:1rem}
- .checks{display:grid; gap:8px; margin-top:6px}
- .checkline{display:flex; gap:10px; align-items:flex-start; font-size:.95rem; color:var(--muted)}
- .checkline input{margin-top:4px}
+    /* Sections */
+    section.section{padding:calc(var(--space)*1.2) 0}
+    .grid-3{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px}
+    @media(max-width:980px){ .grid-3{grid-template-columns:1fr} }
+    .grid-2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px}
+    @media(max-width:980px){ .grid-2{grid-template-columns:1fr} }
+    .feature h3{margin:.2rem 0 .6rem}
+    .feature p{margin:0}
+    .list{padding-left:18px; margin:8px 0}
+    .list li{margin:6px 0}
 
- /* Cookie bar */
- .cookie{
- position:fixed; inset:auto 0 0 0; z-index:60; background:#0b1e6b; color:#fff;
- display:flex; gap:14px; align-items:center; justify-content:space-between;
- padding:14px 18px; box-shadow:0 -8px 24px rgba(2,6,23,.15);
- }
- .cookie p{margin:0; font-size:.95rem}
- .cookie .cookie-btn{
- background:linear-gradient(180deg,var(--yellow-2),var(--yellow)); color:#0f172a;
- border:0; border-radius:10px; padding:10px 14px; font-weight:800; cursor:pointer;
- }
-
- footer{margin-top:22px; text-align:center; color:var(--muted); font-size:.9rem}
- a.link{color:var(--blue); text-decoration:none; border-bottom:1px dotted #bfdbfe}
- </style>
+    /* Footer */
+    footer{border-top:1px solid var(--line); padding:var(--space) 0; color:var(--muted)}
+  </style>
 </head>
 <body>
-<div class="wrap"><div class="topnav"><div class="brand">DutchExam.online</div><div><a href="tests.html" class="btn ghost">Tests</a></div></div>
- <div class="wrap">
- <!-- HERO -->
- <section class="section">
- <span class="eyebrow">DutchExam.online — AI-ready practice</span>
- <h1>#1 online Dutch school for inburgering</h1>
- <p class="lead">We’ll determine your level for free and match a study program.</p>
- <div class="cta">
- <button class="btn primary" id="startTest"></button>
- <a class="btn secondary" href="#subscribe">Get early access updates</a>
- <!-- NEW: link to the dedicated tests page -->
- <a class="btn primary" href="tests.html">Take a free level test →</a>
- </div>
- </section>
+  <header class="topnav">
+    <div class="wrap inner">
+      <div class="brand"><span class="dot"></span> DutchExam.online</div>
+      <nav class="navlinks">
+        <a href="#tests">Tests</a>
+        <a href="#how">How it works</a>
+        <a href="#programs">Programs</a>
+        <a href="results.html">Results</a>
+      </nav>
+      <div>
+        <a class="btn secondary" href="test-in-depth.html" onclick="DE_track('cta_click',{place:'nav',to:'in_depth'})">Start In‑Depth</a>
+      </div>
+    </div>
+  </header>
 
- <!-- PROGRAMS -->
- <section class="section">
- <h2>Programs for every goal with a results guarantee</h2>
- <p class="lead">Study one-on-one with an experienced teacher and practice Dutch 24/7.</p>
- <div class="grid-2" style="margin-top:18px">
- <div class="section" style="margin:0; border-color:#bfdbfe">
- <h3 style="margin:0 0 6px; color:var(--blue)">Beginner → A1/A2</h3>
- <p class="muted">Everyday language, essential grammar, survival dialogues.</p>
- </div>
- <div class="section" style="margin:0; border-color:#fde68a">
- <h3 style="margin:0 0 6px; color:#9a6700">Exam Focus: Inburgering</h3>
- <p class="muted">Official-style tasks, time management, feedback on mistakes.</p>
- </div>
- </div>
- </section>
+  <main>
+    <section class="hero">
+      <div class="wrap inner">
+        <div>
+          <span class="chip">Inburgering • A2 → B1</span>
+          <h1 class="title">Pass your Inburgering exam — with confidence</h1>
+          <p class="lead">Practice official‑style tasks for <strong>Lezen, Luisteren, Spreken, Schrijven</strong> and <strong>KNM</strong>. Take a free In‑Depth test to pinpoint your level and get a plan.</p>
+          <div class="cta-row">
+            <a class="btn primary" href="test-in-depth.html" onclick="DE_track('cta_click',{place:'hero',to:'in_depth'})">Start In‑Depth test</a>
+            <a class="btn ghost" href="#tests" onclick="DE_track('cta_click',{place:'hero',to:'skills'})">Choose a skill test</a>
+          </div>
+          <p class="muted" style="margin-top:8px">No sign‑up. Timed tasks. Instant feedback.</p>
+        </div>
+        <figure aria-hidden="true"></figure>
+      </div>
+    </section>
 
- <!-- ECOSYSTEM -->
- <section class="section">
- <h2>Achieve real results with our ecosystem</h2>
- <p class="lead">One course — a complete set of Dutch tools that guarantee progress.</p>
- <div class="grid-2" style="margin-top:18px">
- <div class="section" style="margin:0; border-color:#bfdbfe">
- <h3 style="margin:0 0 6px; color:var(--blue)">Smart practice</h3>
- <p class="muted">Adaptive questions and instant explanations.</p>
- </div>
- <div class="section" style="margin:0; border-color:#fde68a">
- <h3 style="margin:0 0 6px; color:#9a6700">Listening & speaking</h3>
- <p class="muted">Short drills and real-life scenarios (coming soon).</p>
- </div>
- </div>
- </section>
+    <section id="how" class="section">
+      <div class="wrap">
+        <h2>How we determine your level</h2>
+        <div class="grid-3">
+          <div class="card feature">
+            <h3>Adaptive</h3>
+            <p>We start with simpler questions and gradually move to harder ones. The test adapts to your answers in real time: correct responses unlock more challenging tasks, while mistakes trigger targeted checks from another angle.</p>
+          </div>
+          <div class="card feature">
+            <h3>Accurate</h3>
+            <p>The more tasks you complete, the more precisely we estimate your level. We triangulate your accuracy, speed, and consistency to avoid over‑ or under‑estimation. Patterns matter more than one‑offs.</p>
+          </div>
+          <div class="card feature">
+            <h3>Transparent</h3>
+            <p>After the test you’ll see what influenced the result: strengths, typical mistakes, and next steps. Re‑take specific skills (e.g., Luisteren) to improve the overall estimate.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
- <!-- QUIZ (Dutch) -->
- <section class="section" id="quiz" style="display:none">
- <h2> (5 vragen)</h2>
- <p class="muted">Beantwoord en krijg direct feedback. Aan het einde zie je je score en tips.</p>
- <div class="progress" aria-hidden="true"><div class="bar" id="bar"></div></div>
- <div id="qwrap"></div>
- <div class="cta" style="margin-top:10px">
- <button class="btn primary" id="nextBtn" disabled>Next</button>
- <div class="status" id="instantStatus"></div>
- </div>
- <p class="muted" id="counter" style="margin-top:8px"></p>
- </section>
+    <section id="tests" class="section" style="background:linear-gradient(180deg, rgba(253,224,71,.10), transparent)">
+      <div class="wrap">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <h2>Choose your test</h2>
+          <a class="btn secondary" href="results.html" onclick="DE_track('cta_click',{place:'tests',to:'results'})">View my results</a>
+        </div>
+        <p class="lead">Inburgering skills + full in‑depth level check.</p>
+        <div class="grid-3" style="margin-top:14px">
+          <div class="card">
+            <h3>Lezen — Reading</h3>
+            <p class="muted">Understand written texts and tasks.</p>
+            <div class="cta-row"><a class="btn secondary" href="test-lezen.html" onclick="DE_track('start_skill',{skill:'lezen'})">Start</a></div>
+          </div>
+          <div class="card">
+            <h3>Luisteren — Listening</h3>
+            <p class="muted">Comprehension of spoken Dutch, with audio.</p>
+            <div class="cta-row"><a class="btn secondary" href="test-luisteren.html" onclick="DE_track('start_skill',{skill:'luisteren'})">Start</a></div>
+          </div>
+          <div class="card">
+            <h3>Spreken — Speaking</h3>
+            <p class="muted">Express yourself clearly and politely.</p>
+            <div class="cta-row"><a class="btn secondary" href="test-spreken.html" onclick="DE_track('start_skill',{skill:'spreken'})">Start</a></div>
+          </div>
+          <div class="card">
+            <h3>Schrijven — Writing</h3>
+            <p class="muted">Emails, forms, and short texts with correct word order.</p>
+            <div class="cta-row"><a class="btn secondary" href="test-schrijven.html" onclick="DE_track('start_skill',{skill:'schrijven'})">Start</a></div>
+          </div>
+          <div class="card">
+            <h3>KNM — Society knowledge</h3>
+            <p class="muted">Civic integration: rules, services, everyday life.</p>
+            <div class="cta-row"><a class="btn secondary" href="test-knm.html" onclick="DE_track('start_skill',{skill:'knm'})">Start</a></div>
+          </div>
+          <div class="card">
+            <h3>Free level test — In‑Depth (~12 minutes)</h3>
+            <p class="muted">Mixed tasks with a timer and detailed analysis.</p>
+            <div class="cta-row"><a class="btn primary" href="test-in-depth.html" onclick="DE_track('start_skill',{skill:'in_depth'})">Start In‑Depth</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
- <!-- RESULT -->
- <section class="section" id="result" style="display:none">
- <h2>Your score</h2>
- <p id="scoreText" class="lead" style="margin-bottom:6px"></p>
- <p id="advice" class="muted"></p>
- <div class="cta" style="margin-top:14px">
- <button class="btn primary" id="retry">Try again</button>
- <a class="btn" href="#subscribe">Get early access & tips</a>
- </div>
- </section>
+    <section id="programs" class="section">
+      <div class="wrap">
+        <h2>Programs for every goal — with a results guarantee</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Study one‑on‑one with an experienced teacher</h3>
+            <p>Personalized lessons that fit your schedule and pace. You’ll practice Dutch <strong>every day</strong> — short voice/text drills, feedback on your recordings, and targeted homework that locks in progress.</p>
+            <ul class="list">
+              <li><strong>Beginner → A1/A2.</strong> Everyday language, essential grammar, survival dialogues.</li>
+              <li>Clear weekly milestones so you always know what to improve next.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Exam Focus: Inburgering</h3>
+            <p>Official‑style tasks for Lezen, Luisteren, Spreken, Schrijven, and KNM. We train timing and accuracy, then analyze typical mistakes and show how to fix them.</p>
+            <ul class="list">
+              <li>Time‑management strategies and realistic mock tests.</li>
+              <li>Detailed feedback after each attempt — exactly what the exam expects.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Practice 24/7</h3>
+            <p>Use mini‑drills from your phone: flashcards, audio shadowing, and writing prompts. Your teacher sees the stats and adapts your plan weekly.</p>
+            <ul class="list">
+              <li>Works alongside classes or as a standalone practice path.</li>
+              <li>Guaranteed progress if you follow the plan (or we extend your access for free).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
- <!-- SUBSCRIBE -->
- <section class="section" id="subscribe">
- <h2>Get early access</h2>
- <p class="lead" style="margin-bottom:26px">Be the first to try full practice mode, audio drills, and AI explanations.</p>
- <form id="subscribe-form" name="subscribe" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
- <input type="hidden" name="form-name" value="subscribe" />
- <div style="display:none"><label>Don’t fill this<input name="bot-field"/></label></div>
+    <section class="section" style="padding-top:0">
+      <div class="wrap card" style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+        <div>
+          <h3>Ready to start?</h3>
+          <p class="muted">Kick off with the free In‑Depth test. No account required.</p>
+        </div>
+        <div><a class="btn primary" href="test-in-depth.html" onclick="DE_track('cta_click',{place:'bottom_cta',to:'in_depth'})">Start In‑Depth test</a></div>
+      </div>
+    </section>
+  </main>
 
- <div class="input">
- <input id="name" type="text" name="name" placeholder="Your name" required/>
- </div>
- <div class="input">
- <input id="phone" type="tel" name="phone" placeholder="Your phone (e.g., +31 6 1234 5678)" pattern="^[+0-9 ()-]{7,}$"/>
- </div>
- <div class="input">
- <input id="email" type="email" name="email" placeholder="Your email" required/>
- </div>
+  <footer>
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <div class="muted">© <span id="year"></span> DutchExam.online</div>
+      <div><a href="tests.html">All tests</a> · <a href="results.html">My results</a></div>
+    </div>
+  </footer>
 
- <div class="checks">
- <label class="checkline">
- <input type="checkbox" id="consentPersonal" name="consent_personal" value="yes" required />
- <span>I agree to the processing of personal data.</span>
- </label>
- <label class="checkline">
- <input type="checkbox" id="consentAds" name="consent_ads" value="yes" />
- <span>I agree to receive advertising.</span>
- </label>
- </div>
-
- <div class="cta" style="margin-top:10px">
- <button class="btn primary" id="submitBtn" type="submit"><span class="btn-text">Notify me</span></button>
- <!-- Secondary CTA to tests page here too -->
- <a class="btn secondary" href="tests.html">Take a free level test →</a>
- </div>
- <div class="muted" id="formMsg"></div>
- </form>
- <footer>© <span id="year"></span> DutchExam.online • <a class="link" href="mailto:info@dutchexam.online">Contact</a> • <a class="link" href="tests.html">Level tests</a></footer>
- </section>
- </div>
-
- <!-- COOKIE CONSENT -->
- <div id="cookie" class="cookie" style="display:none">
- <p>By using our site, you agree to our use of cookies.</p>
- <button class="cookie-btn" id="cookieBtn">Accept</button>
- </div>
-
- <script>
- document.getElementById('year').textContent = new Date().getFullYear();
-
- // ===== COOKIE CONSENT =====
- const cookieBar = document.getElementById('cookie');
- const cookieBtn = document.getElementById('cookieBtn');
- if (!localStorage.getItem('cookieAccepted')) {
- cookieBar.style.display = 'flex';
- }
- cookieBtn?.addEventListener('click', () => {
- localStorage.setItem('cookieAccepted', '1');
- cookieBar.style.display = 'none';
- });
-
- // ===== QUIZ DATA (Dutch) =====
- const questions = [
- {
- q: "Je krijgt een brief van de gemeente. Wat doe je eerst?",
- opts: [
- "Je gooit de brief weg",
- "Je opent de brief en leest hem zorgvuldig",
- "Je belt een vriend voordat je de brief opent"
- ],
- correct: 1,
- explain: "Open en lees officiële post altijd eerst. Vraag daarna hulp als iets onduidelijk is."
- },
- {
- q: "Je bent te laat voor je afspraak bij de gemeente. Wat doe je?",
- opts: [
- "Niets, het is niet belangrijk",
- "Je belt of mailt om te zeggen dat je later komt",
- "Je komt de volgende dag zonder iets te zeggen"
- ],
- correct: 1,
- explain: "Informeer op tijd. Nederlandse instanties verwachten communicatie."
- },
- {
- q: "Je hebt snel een afspraak nodig bij de huisarts. Wat is juist?",
- opts: [
- "Zonder te bellen naar de huisarts gaan",
- "Eerst bellen en om een spoedplek vragen",
- "Alleen een e-mail sturen"
- ],
- correct: 1,
- explain: "Bel eerst en geef aan dat het spoed is. De assistent plant je in."
- },
- {
- q: "Je verhuist naar een nieuw adres. Wat moet je doen?",
- opts: [
- "Binnen enkele dagen je nieuwe adres bij de gemeente doorgeven",
- "Wachten tot volgend jaar",
- "Alleen je vrienden informeren"
- ],
- correct: 0,
- explain: "Je moet je adreswijziging bij de gemeente registreren (meestal binnen 5 dagen)."
- },
- {
- q: "Je buurman speelt ’s nachts harde muziek. Wat doe je eerst?",
- opts: [
- "Meteen de politie bellen",
- "Een briefje in de hal achterlaten",
- "Eerst beleefd met de buur praten"
- ],
- correct: 2,
- explain: "Begin met vriendelijk praten. Als het doorgaat, kun je verdere stappen nemen."
- }
- ];
-
- // ===== QUIZ LOGIC =====
- let idx = 0, score = 0, answered = false;
- const quizEl = document.getElementById('quiz');
- const qwrap = document.getElementById('qwrap');
- const nextBtn = document.getElementById('nextBtn');
- const statusEl = document.getElementById('instantStatus');
- const bar = document.getElementById('bar');
- const counter = document.getElementById('counter');
-
- function renderQuestion(){
- const q = questions[idx];
- qwrap.innerHTML = `
- <div class="qcard">
- <div style="font-weight:700; margin-bottom:6px">Vraag ${idx+1} van ${questions.length}</div>
- <div>${q.q}</div>
- <div class="opts" id="opts"></div>
- </div>
- <div class="muted" style="margin-top:6px">Tip: denk aan typische procedures in Nederland.</div>
- `;
- const optsEl = document.getElementById('opts');
- q.opts.forEach((t, i) => {
- const d = document.createElement('button');
- d.type = "button";
- d.className = "opt";
- d.textContent = t;
- d.addEventListener('click', () => choose(i));
- optsEl.appendChild(d);
- });
- answered = false;
- nextBtn.disabled = true;
- statusEl.textContent = "";
- counter.textContent = `Voortgang: ${idx+1}/${questions.length}`;
- bar.style.width = `${((idx)/questions.length)*100}%`;
- }
-
- function choose(i){
- if (answered) return;
- answered = true;
- const q = questions[idx];
- const optsEl = document.querySelectorAll('.opt');
- optsEl.forEach((b, j) => {
- if (j === q.correct) b.classList.add('correct');
- if (j === i && i !== q.correct) b.classList.add('wrong');
- b.disabled = true;
- });
- if (i === q.correct){
- score++;
- statusEl.textContent = "Goed zo!";
- statusEl.className = "status ok";
- } else {
- statusEl.textContent = "Niet helemaal — zie de uitleg hierboven.";
- statusEl.className = "status bad";
- }
- nextBtn.disabled = false;
- const exp = document.createElement('div');
- exp.className = "muted";
- exp.style.marginTop = "10px";
- exp.innerHTML = `<strong>Waarom:</strong> ${q.explain}`;
- qwrap.appendChild(exp);
- }
-
- function showResult(){
- document.getElementById('quiz').style.display = 'none';
- const res = document.getElementById('result');
- res.style.display = 'block';
- const scoreText = document.getElementById('scoreText');
- scoreText.textContent = `Je hebt ${score} van de ${questions.length} goed.`;
- const advice = document.getElementById('advice');
- if (score === 5) advice.textContent = "Top! Je bent klaar voor meer gevorderde oefeningen.";
- else if (score >= 3) advice.textContent = "Mooi! Nog wat oefenen en je bent er bijna.";
- else advice.textContent = "Geen stress — oefening baart kunst. Probeer opnieuw en bekijk de tips.";
- window.scrollTo({top: res.offsetTop - 12, behavior:'smooth'});
- }
-
- document.getElementById('startTest').addEventListener('click', () => {
- idx = 0; score = 0;
- document.getElementById('result').style.display = 'none';
- quizEl.style.display = 'block';
- renderQuestion();
- window.scrollTo({top: quizEl.offsetTop - 12, behavior:'smooth'});
- });
-
- nextBtn.addEventListener('click', () => {
- if (idx < questions.length - 1){
- idx++; renderQuestion();
- } else {
- bar.style.width = '100%';
- showResult();
- }
- });
-
- document.getElementById('retry').addEventListener('click', () => {
- idx = 0; score = 0; quizEl.style.display = 'block';
- document.getElementById('result').style.display = 'none';
- renderQuestion();
- window.scrollTo({top: quizEl.offsetTop - 12, behavior:'smooth'});
- });
-
- // ===== NETLIFY FORMS (AJAX) =====
- const sForm = document.getElementById('subscribe-form');
- const formMsg = document.getElementById('formMsg');
- const submitBtn = document.getElementById('submitBtn');
- const btnText = submitBtn.querySelector('.btn-text');
-
- function encodeFormData(fd){
- const pairs=[]; for (const [n,v] of fd) pairs.push(encodeURIComponent(n)+'='+encodeURIComponent(v));
- return pairs.join('&');
- }
- sForm.addEventListener('submit', async (e) => {
- e.preventDefault();
- formMsg.textContent = "";
-
- // require personal data consent
- const personalOk = document.getElementById('consentPersonal').checked;
- if (!personalOk) {
- formMsg.textContent = "Please agree to the processing of personal data to continue.";
- return;
- }
-
- submitBtn.disabled = true; 
- const old = submitBtn.querySelector('.btn-text'); if (old) old.textContent = "Submitting…";
-
- const data = new FormData(sForm);
- if (data.get('bot-field')) { submitBtn.disabled=false; if (old) old.textContent="Notify me"; return; }
- try{
- await fetch('/', {
- method:'POST',
- headers:{'Content-Type':'application/x-www-form-urlencoded'},
- body: encodeFormData(data)
- });
- sForm.reset();
- formMsg.textContent = "✅ Thanks! You’re on the list.";
- }catch(err){
- console.error(err);
- formMsg.textContent = "⚠️ Something went wrong. Please try again.";
- }finally{
- submitBtn.disabled = false; if (old) old.textContent = "Notify me";
- }
- });
- </script>
-
-
-<section class="section" id="variants">
-  <h2>Choose your test</h2>
-  <p class="lead">Inburgering skills + full in‑depth level check.</p>
-  <div class="grid-3" style="margin-top:14px">
-    <div class="card"><h3>Lezen — Reading</h3><p class="muted">Understand written texts and tasks.</p><div class="cta"><a class="btn secondary" href="test-lezen.html">Start</a></div></div>
-    <div class="card"><h3>Luisteren — Listening</h3><p class="muted">Comprehension of spoken Dutch.</p><div class="cta"><a class="btn secondary" href="test-luisteren.html">Start</a></div></div>
-    <div class="card"><h3>Spreken — Speaking</h3><p class="muted">Express yourself clearly in Dutch.</p><div class="cta"><a class="btn secondary" href="test-spreken.html">Start</a></div></div>
-    <div class="card"><h3>Schrijven — Writing</h3><p class="muted">Write messages, emails, short texts.</p><div class="cta"><a class="btn secondary" href="test-schrijven.html">Start</a></div></div>
-    <div class="card"><h3>KNM — Kennis van de Nederlandse Maatschappij</h3><p class="muted">Civic integration knowledge.</p><div class="cta"><a class="btn secondary" href="test-knm.html">Start</a></div></div>
-    <div class="card"><h3>Free level test — In‑Depth (~12 minutes)</h3><p class="muted">Mixed tasks with a timer and detailed analysis.</p><div class="cta"><a class="btn secondary" href="test-in-depth.html">Start</a></div></div>
-  </div>
-</section>
-
-</div><!--wrap-end-->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
