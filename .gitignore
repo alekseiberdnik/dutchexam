@@ -427,3 +427,4 @@ build/
 coverage/
 *.log
 >>>>>>> a314697 (chore: initial commit)
+.DS_Store
