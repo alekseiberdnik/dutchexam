@@ -1,0 +1,28 @@
+
+/* Theme variables */
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --paper: #f9f9fb;
+  --text: #0a0f1a;
+  --muted: #4a4a5a;
+  --line: rgba(0,0,0,.1);
+  --orange: #ff6f00;
+  --blue: #1e3a8a;
+  --radius: 20px;
+  --shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0f1a;
+    --paper: #0f1726;
+    --text: #e6eefc;
+    --muted: #97a3c2;
+    --line: rgba(255,255,255,.12);
+    --shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+}
+/* Body background by variables */
+body { background: var(--bg); color: var(--text); }
+.section { background: var(--paper); border:1px solid var(--line); }
+.muted { color: var(--muted); }

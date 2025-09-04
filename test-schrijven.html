@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<script>
+// Early theme selection: prefer system setting; fallback to time-of-day (07-19 light, else dark)
+(function(){
+  try {
+    const hour = new Date().getHours();
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    let theme = null;
+
+    if (prefersDark) theme = 'dark';
+    else if (prefersLight) theme = 'light';
+    else theme = (hour >= 7 && hour < 19) ? 'light' : 'dark'; // fallback by local time
+
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // React to system changes
+    if (window.matchMedia) {
+      const mqDark = window.matchMedia('(prefers-color-scheme: dark)');
+      const mqLight = window.matchMedia('(prefers-color-scheme: light)');
+      const apply = () => {
+        const pd = mqDark.matches, pl = mqLight.matches;
+        const t = pd ? 'dark' : (pl ? 'light' : ((new Date().getHours()>=7 && new Date().getHours()<19) ? 'light':'dark'));
+        document.documentElement.setAttribute('data-theme', t);
+      };
+      mqDark.addEventListener('change', apply);
+      mqLight.addEventListener('change', apply);
+    }
+  } catch(e) {}
+})();
+</script>
+
+  <link rel="stylesheet" href="assets/tests.css"/>
+  <link rel="stylesheet" href="assets/brand.css"/>
+  <link rel="stylesheet" href="assets/theme.css"/>
+  <link rel="stylesheet" href="assets/consent.css"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Schrijven Test — Writing</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- inline styles moved to assets/tests.css -->
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
+  <meta property="og:title" content="DutchExam.online — Inburgering Prep"/>
+  <meta property="og:description" content="Prepare for the Dutch inburgering exam with DutchExam.online"/>
+  <meta property="og:image" content="assets/og-preview.svg"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://dutchexam.online"/>
+    
+</head>
+<body data-skill="schrijven">
+  <div class="wrap">
+    <div class="topnav">
+      <div class="brand">DutchExam.online</div>
+<section class="section test-shell"><h2>About this test</h2><p class="muted">Write short messages, emails, and notes in Dutch. Focus on clarity, basic grammar and correct word order.</p></section><section id="sample-questions" class="section test-shell"><h2>Sample Questions</h2><div class="card"><p><strong>Q1.</strong> Schrijf een korte email aan je docent om te zeggen dat je ziek bent en niet naar de les kunt komen.</p><textarea rows="3" style="width:100%;border-radius:8px;padding:6px"></textarea></div><div class="card"><p><strong>Q2.</strong> Schrijf een briefje aan je buurman om hem te feliciteren met zijn verjaardag.</p><textarea rows="3" style="width:100%;border-radius:8px;padding:6px"></textarea></div><div class="cta" style="margin-top:12px"><button class="btn primary" type="button" onclick="showRecommendations()">Submit answers</button></div></section>
+<section id="recommendations" class="section test-shell" style="display:none"><h2>Your Recommendations</h2><div class="muted">Based on your answers, we suggest focusing on key areas of improvement. (Demo placeholder)</div></section>
+
+      <div><a href="index.html">← Back</a> • <a href="tests.html">All tests</a></div>
+    </div>
+
+    <div class="grid">
+      <!-- SIDEBAR -->
+      <aside class="side" id="sidebar">
+        <h3>Current level</h3>
+        <div id="levelBadge" class="pill pill-blue">—</div>
+
+        <div class="kv">
+          <div>Accuracy</div>
+          <div class="val"><span id="accVal">—</span></div>
+        </div>
+        <div class="barwrap"><div id="accBar" class="bar" style="width:0%"></div></div>
+
+        <div class="kv">
+          <div>Points</div>
+          <div class="val"><span id="pointsVal">0</span></div>
+        </div>
+
+        <div class="kv">
+          <div>Question</div>
+          <div class="val"><span id="qpos">1</span>/<span id="qtotal">10</span></div>
+        </div>
+
+        <div class="pill pill-yellow" style="margin-top:10px">Schrijven Test ~5 min</div>
+        <p class="muted" style="margin-top:10px">Complete the sentences. Some tasks use drag-and-drop or a short typed answer.</p>
+      </aside>
+
+      <!-- MAIN -->
+      <main>
+        <section class="card">
+          \1<span data-i18n="test.title">\2</span>\3
+          <p class="lead">Complete the sentence or choose the best option. We’ll estimate your level as you go.</p>
+          <div class="progress"><div id="pbar" class="pbar"></div></div>
+          <div class="qmeta" id="qmeta"></div>
+          <div class="qtitle" id="qtitle"></div>
+
+          <!-- dynamic question host -->
+          <div id="qhost"></div>
+
+          <div class="status" id="status"></div>
+
+          <div class="btns">
+            <button id="checkBtn" class="btn primary">Check</button>
+            <button id="nextBtn" class="btn ghost" disabled>Next</button>
+            <button id="skipBtn" class="btn ghost">Skip</button>
+            <button id="restartBtn" class="btn secondary" style="margin-left:auto">Restart</button>
+          </div>
+        </section>
+
+        <!-- RESULT -->
+        <section class="card result" id="resultCard">
+          \1<span data-i18n="test.subtitle">\2</span>\3
+          <p class="center"><strong>Score:</strong> <span id="finalPoints">0</span> / <span id="finalTotal">0</span> •
+            <strong>Accuracy:</strong> <span id="finalAcc">0%</span></p>
+          <p class="center"><strong>Estimated level:</strong> <span id="finalLevel">—</span></p>
+          <div class="center btns" style="justify-content:center">
+            <a class="btn primary" href="tests.html">Choose another test</a>
+            <button class="btn ghost" id="againBtn">Retake this test</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+<script>
+/** ====== DATA ====== */
+const QUESTIONS = [
+  // 1 input
+  {
+    type: 'input',
+    prompt: 'Complete: Ik ___ in Amsterdam.',
+    answer: ['woon'],
+    help: 'Present tense: ik woon (no -t).',
+  },
+  // 2 mc
+  {
+    type: 'mc',
+    prompt: 'Choose the correct word: U moet hier ___.',
+    options: ['wachten', 'wacht', 'wachtte'],
+    correctIndex: 0,
+    help: 'With “moet”, use the infinitive: wachten.',
+  },
+  // 3 input
+  {
+    type: 'input',
+    prompt: 'Complete: Morgen ___ we naar de markt.',
+    answer: ['gaan'],
+    help: 'We go = wij/ we gaan.',
+  },
+  // 4 mc
+  {
+    type: 'mc',
+    prompt: 'Wat is de juiste reactie? — “Dank u wel!” — ___',
+    options: ['Tot ziens!', 'Graag gedaan!', 'Goedemorgen!'],
+    correctIndex: 1,
+    help: '“Dank u wel” → “Graag gedaan!”.',
+  },
+  // 5 drag
+  {
+    type: 'dnd',
+    prompt: 'Zet de woorden in de juiste volgorde:',
+    words: ['De','winkel','is','op','zondag','gesloten.'],
+  },
+  // 6 input
+  {
+    type: 'input',
+    prompt: 'Vul in: Ik heb ___ afspraak bij de huisarts.',
+    answer: ['een'],
+    help: '“een afspraak” = an appointment.',
+  },
+  // 7 mc
+  {
+    type: 'mc',
+    prompt: 'Kies de juiste zin.',
+    options: ['Ik ben te laat worden.', 'Ik kom te laat.', 'Ik laat te kom.'],
+    correctIndex: 1,
+    help: 'Correct form: “Ik kom te laat.”',
+  },
+  // 8 drag
+  {
+    type: 'dnd',
+    prompt: 'Maak de vraag:',
+    words: ['Mag','ik','met','pin','betalen?'],
+  },
+  // 9 input
+  {
+    type: 'input',
+    prompt: 'Vul in: Hoe ___ het met u?',
+    answer: ['gaat'],
+    help: 'Hoe gaat het met u?',
+  },
+  // 10 mc
+  {
+    type: 'mc',
+    prompt: 'U wilt hulp. Wat zegt u?',
+    options: ['Ik wil graag hulp.', 'Ik niets.', 'Ik boos.'],
+    correctIndex: 0,
+    help: 'Polite request: “Ik wil graag hulp.”',
+  },
+];
+
+const TOTAL = QUESTIONS.length;
+
+/** ====== STATE ====== */
+let idx = 0;
+let correct = 0;
+let attempted = 0;
+let checked = false; // current question graded
+let dndState = null; // for drag-n-drop
+
+/** ====== DOM ====== */
+const qmeta = document.getElementById('qmeta');
+const qtitle = document.getElementById('qtitle');
+const qhost = document.getElementById('qhost');
+const statusEl = document.getElementById('status');
+const checkBtn = document.getElementById('checkBtn');
+const nextBtn = document.getElementById('nextBtn');
+const skipBtn = document.getElementById('skipBtn');
+const restartBtn = document.getElementById('restartBtn');
+const resultCard = document.getElementById('resultCard');
+const pbar = document.getElementById('pbar');
+
+/** Sidebar */
+const accVal = document.getElementById('accVal');
+const accBar = document.getElementById('accBar');
+const pointsVal = document.getElementById('pointsVal');
+const qpos = document.getElementById('qpos');
+const qtotal = document.getElementById('qtotal');
+const levelBadge = document.getElementById('levelBadge');
+
+/** Final */
+const finalPoints = document.getElementById('finalPoints');
+const finalTotal = document.getElementById('finalTotal');
+const finalAcc = document.getElementById('finalAcc');
+const finalLevel = document.getElementById('finalLevel');
+const againBtn = document.getElementById('againBtn');
+
+qtotal.textContent = TOTAL;
+
+/** ====== RENDER ====== */
+function render() {
+  resultCard.style.display = 'none';
+  qhost.innerHTML = '';
+  statusEl.textContent = '';
+  statusEl.className = 'status';
+  checked = false;
+
+  const q = QUESTIONS[idx];
+  qmeta.textContent = `Question ${idx+1} of ${TOTAL}`;
+  qtitle.textContent = q.prompt;
+
+  // progress
+  pbar.style.width = `${(idx)/TOTAL*100}%`;
+  qpos.textContent = idx+1;
+
+  // build UI
+  if (q.type === 'input') {
+    const box = document.createElement('div');
+    box.className = 'input';
+    box.innerHTML = `<input id="answerInput" type="text" placeholder="Type your answer…" autocomplete="off">`;
+    qhost.appendChild(box);
+  }
+  else if (q.type === 'mc') {
+    const opts = document.createElement('div');
+    opts.className = 'opts';
+    q.options.forEach((optText, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'opt';
+      b.textContent = optText;
+      b.addEventListener('click', () => {
+        if (checked) return;
+        // mark selection
+        document.querySelectorAll('.opt').forEach(o => o.dataset.sel = '0');
+        b.dataset.sel = '1';
+        // visual focus
+        document.querySelectorAll('.opt').forEach(o => o.style.outline = '');
+        b.style.outline = '2px solid #bfdbfe';
+      });
+      opts.appendChild(b);
+    });
+    qhost.appendChild(opts);
+  }
+  else if (q.type === 'dnd') {
+    dndState = { slots: [], pool: [] };
+    const instr = document.createElement('div');
+    instr.className = 'muted';
+    instr.textContent = 'Drag or click words into the blanks in correct order.';
+    qhost.appendChild(instr);
+
+    const slots = document.createElement('div');
+    slots.className = 'slots';
+    q.words.forEach(() => {
+      const s = document.createElement('button');
+      s.type = 'button';
+      s.className = 'slot';
+      s.addEventListener('click', () => {
+        // return word to pool
+        if (s.textContent.trim() !== '') {
+          const token = createToken(s.textContent);
+          pool.appendChild(token);
+          s.textContent = '';
+          s.classList.remove('filled');
+        }
+      });
+      slots.appendChild(s);
+      dndState.slots.push(s);
+    });
+    qhost.appendChild(slots);
+
+    const pool = document.createElement('div');
+    pool.className = 'tokens';
+    // shuffle words
+    const shuffled = [...q.words].sort(() => Math.random()-0.5);
+    shuffled.forEach(w => pool.appendChild(createToken(w)));
+    qhost.appendChild(pool);
+
+    // helpers
+    function createToken(text){
+      const t = document.createElement('button');
+      t.type = 'button';
+      t.className = 'token';
+      t.textContent = text;
+
+      // click-to-insert
+      t.addEventListener('click', () => {
+        const slot = dndState.slots.find(s => s.textContent.trim() === '');
+        if (slot){
+          slot.textContent = text;
+          slot.classList.add('filled');
+          t.remove();
+        }
+      });
+
+      // drag support
+      t.draggable = true;
+      t.addEventListener('dragstart', () => t.classList.add('dragging'));
+      t.addEventListener('dragend', () => t.classList.remove('dragging'));
+
+      dndState.pool = pool;
+      // droppable slots
+      dndState.slots.forEach(s => {
+        s.addEventListener('dragover', (e) => e.preventDefault());
+        s.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const drag = document.querySelector('.token.dragging');
+          if (!drag) return;
+          if (s.textContent.trim() === ''){
+            s.textContent = drag.textContent;
+            s.classList.add('filled');
+            drag.remove();
+          }
+        });
+      });
+
+      return t;
+    }
+  }
+
+  // buttons
+  nextBtn.disabled = true;
+}
+
+/** ====== CHECK / SCORE ====== */
+function normalize(s){ return s.trim().toLowerCase().replace(/\s+/g,' '); }
+
+function checkCurrent() {
+  if (checked) return;
+  const q = QUESTIONS[idx];
+  let isCorrect = false;
+
+  if (q.type === 'input') {
+    const v = document.getElementById('answerInput').value || '';
+    if (!v.trim()){
+      statusEl.textContent = 'Type your answer first.';
+      statusEl.className = 'status';
+      return;
+    }
+    isCorrect = q.answer.map(a => normalize(a)).includes(normalize(v));
+  }
+  else if (q.type === 'mc') {
+    const opts = Array.from(document.querySelectorAll('.opt'));
+    const selIndex = opts.findIndex(o => o.dataset.sel === '1');
+    if (selIndex === -1){
+      statusEl.textContent = 'Choose an option first.';
+      statusEl.className = 'status';
+      return;
+    }
+    isCorrect = (selIndex === q.correctIndex);
+    // reveal
+    opts.forEach((o,i) => {
+      if (i === q.correctIndex) o.classList.add('correct');
+      if (i === selIndex && !isCorrect) o.classList.add('wrong');
+      o.disabled = true;
+    });
+  }
+  else if (q.type === 'dnd') {
+    const filled = dndState.slots.every(s => s.textContent.trim() !== '');
+    if (!filled){
+      statusEl.textContent = 'Fill all blanks first.';
+      statusEl.className = 'status';
+      return;
+    }
+    const current = dndState.slots.map(s => s.textContent);
+    isCorrect = current.join(' ') === QUESTIONS[idx].words.join(' ');
+    // color feedback
+    dndState.slots.forEach((s,i) => {
+      const ok = s.textContent === QUESTIONS[idx].words[i];
+      s.style.outline = ok ? '2px solid #16a34a' : '2px solid #ef4444';
+    });
+  }
+
+  attempted++;
+  if (isCorrect) {
+    correct++;
+    statusEl.textContent = 'Correct!';
+    statusEl.className = 'status ok';
+  } else {
+    statusEl.textContent = 'Not quite.' + (QUESTIONS[idx].help ? ' ' + QUESTIONS[idx].help : '');
+    statusEl.className = 'status bad';
+  }
+  checked = true;
+  nextBtn.disabled = false;
+
+  // update sidebar
+  updateMeters();
+}
+
+function updateMeters(){
+  const acc = attempted ? Math.round((correct/attempted)*100) : 0;
+  accVal.textContent = attempted ? acc + '%' : '—';
+  accBar.style.width = attempted ? acc + '%' : '0%';
+  pointsVal.textContent = String(correct);
+
+  // level estimate (CEFR-ish)
+  const lvl = estimateLevel(acc, attempted);
+  levelBadge.textContent = lvl;
+  levelBadge.className = 'pill ' + (lvl.startsWith('A') ? 'pill-blue' : 'pill-yellow');
+}
+
+function estimateLevel(acc, attempts){
+  if (attempts < 3) return '—';
+  if (acc < 35) return 'A1 Beginner';
+  if (acc < 65) return 'A2 Pre-Intermediate';
+  if (acc < 85) return 'B1 Intermediate';
+  return 'B2 Upper-Intermediate';
+}
+
+/** ====== NAV ====== */
+function nextQuestion(){
+  if (!checked) return;
+  if (idx < TOTAL - 1){
+    idx++;
+    render();
+  } else {
+    finish();
+  }
+}
+
+function skipQuestion(){
+  if (!checked) { attempted++; } // count as attempted if skipped before checking
+  checked = true;
+  nextQuestion();
+}
+
+function restart(){
+  idx = 0; correct = 0; attempted = 0; checked = false;
+  resultCard.style.display = 'none';
+  updateMeters();
+  render();
+}
+
+function finish(){
+  // fill progress
+  pbar.style.width = '100%';
+  // final
+  finalPoints.textContent = correct;
+  finalTotal.textContent = TOTAL;
+  const acc = attempted ? Math.round((correct/attempted)*100) : 0;
+  finalAcc.textContent = acc + '%';
+  finalLevel.textContent = estimateLevel(acc, attempted);
+  resultCard.style.display = 'block';
+  // scroll
+  resultCard.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+/** ====== WIRE ====== */
+checkBtn.addEventListener('click', checkCurrent);
+nextBtn.addEventListener('click', nextQuestion);
+skipBtn.addEventListener('click', skipQuestion);
+restartBtn.addEventListener('click', restart);
+againBtn.addEventListener('click', restart);
+
+/** init */
+updateMeters();
+render();
+</script>
+
+<!-- Google Analytics placeholder -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+</script>
+
+<script>// TODO: extend dict with test page keys</script>
+
+<script>
+// ===== Language dictionary (extended for test UI) =====
+window.DE_DICT = (function(){
+  const dict = {
+    en: {
+      "nav.tests":"Level tests",
+      "cta.leveltest":"Take a free level test →",
+      "cta.early":"Get early access",
+      "ui.start":"Start",
+      "ui.begin":"Begin",
+      "ui.next":"Next",
+      "ui.back":"Back",
+      "ui.submit":"Submit",
+      "ui.finish":"Finish",
+      "ui.result":"Your result",
+      "ui.score":"Score",
+      "ui.tryagain":"Try again",
+      "ui.minutes":"minutes"
+    },
+    nl: {
+      "nav.tests":"Toetsen",
+      "cta.leveltest":"Doe een gratis niveautoets →",
+      "cta.early":"Vroege toegang",
+      "ui.start":"Starten",
+      "ui.begin":"Beginnen",
+      "ui.next":"Volgende",
+      "ui.back":"Terug",
+      "ui.submit":"Verzenden",
+      "ui.finish":"Afronden",
+      "ui.result":"Jouw resultaat",
+      "ui.score":"Score",
+      "ui.tryagain":"Opnieuw proberen",
+      "ui.minutes":"minuten","cookie.settings":"Cookie settings" }
+    ,
+    ru: {
+      "nav.tests":"Тесты уровня",
+      "cta.leveltest":"Пройти бесплатный тест уровня →",
+      "cta.early":"Ранний доступ",
+      "ui.start":"Начать",
+      "ui.begin":"Старт",
+      "ui.next":"Далее",
+      "ui.back":"Назад",
+      "ui.submit":"Отправить",
+      "ui.finish":"Завершить",
+      "ui.result":"Ваш результат",
+      "ui.score":"Pointsы",
+      "ui.tryagain":"Попробовать снова",
+      "ui.minutes":"минут"
+    }
+  };
+  return dict;
+})();
+
+// Apply dictionary to elements with data-i18n
+function applyI18n(lang) {
+  const dict = window.DE_DICT || {};
+  const map = dict[lang] || dict.en || {};
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (map[key]) el.textContent = map[key];
+  });
+  localStorage.setItem("lang", lang);
+}
+
+// Try translating common buttons by their current text -> keys
+function translateButtonsByHeuristics(lang){
+  const map = (window.DE_DICT && (window.DE_DICT[lang]||window.DE_DICT.en)) || {};
+  const pairs = [
+    [/^(start|begin)$/i, "ui.start"],
+    [/^begin$/i, "ui.begin"],
+    [/^(next|volgende|далее)$/i, "ui.next"],
+    [/^(back|terug|назад)$/i, "ui.back"],
+    [/^(submit|verzenden|отправить)$/i, "ui.submit"],
+    [/^(finish|afronden|завершить)$/i, "ui.finish"],
+    [/^(result|jouw resultaat|ваш результат)$/i, "ui.result"],
+    [/^(score|баллы)$/i, "ui.score"],
+    [/^(try again|opnieuw proberen|попробовать снова)$/i, "ui.tryagain"]
+  ];
+  document.querySelectorAll("button, input[type=button], input[type=submit], a").forEach(el=>{
+    const txt = (el.textContent || el.value || "").trim();
+    for (const [re, key] of pairs){
+      if (re.test(txt) && map[key]){
+        if (el.tagName === "INPUT") el.value = map[key]; else el.textContent = map[key];
+        el.setAttribute("data-i18n", key);
+        break;
+      }
+    }
+  });
+}
+
+// Language init on every page
+(function(){
+  const sel = document.getElementById("lang");
+  const urlLang = new URLSearchParams(location.search).get("lang");
+  const saved = (urlLang || localStorage.getItem("lang") || "en");
+  if (sel) sel.value = saved;
+  applyI18n(saved);
+  translateButtonsByHeuristics(saved);
+  if (sel) sel.addEventListener("change", e => { applyI18n(e.target.value); translateButtonsByHeuristics(e.target.value); });
+})();
+
+// ===== Consent Mode v2 + GA4 scaffold =====
+(function(){
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} window.gtag = gtag;
+
+  const GA_ID = window.GA_MEASUREMENT_ID || "G-Y4884MKS1T";
+  // Consent defaults (denied)
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_personalization': 'denied',
+    'ad_user_data': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'granted', // allow i18n save
+    'security_storage': 'granted'
+  });
+
+  // Helper to grant analytics when user interacts meaningfully (you can wire to your own consent UI)
+  window.DE_openConsent = function(){ const el = document.getElementById('de-consent'); if (el) el.classList.add('show'); };
+  window.DE_grantAnalytics = function(){
+    gtag('consent', 'update', {'analytics_storage': 'granted'});
+  };
+
+  // Load GA if ID set
+  if (GA_ID && GA_ID !== "G-Y4884MKS1T"){
+    const s = document.createElement('script'); s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(s);
+    gtag('js', new Date()); gtag('config', GA_ID);
+  }
+
+  // Generic tracker
+  window.DE_track = function(ev, params={}){ if (window.gtag) gtag('event', ev, params); };
+
+  // CTA & test start tracking
+  document.addEventListener('click', (e)=>{
+    const t = e.target.closest('a,button,input[type=submit]');
+    if (!t) return;
+    const label = (t.textContent || t.value || '').trim().slice(0,80);
+    if (/test|start|begin/i.test(label)) window.DE_track('start_test', {label, page: location.pathname});
+    if (/subscribe|notify/i.test(label)) window.DE_track('select_content', {content_type:'cta', item_id:'subscribe_button'});
+    // Grant analytics after first meaningful interaction (soft consent)
+    window.DE_grantAnalytics();
+  });
+
+  // Subscribe success -> generate_lead
+  const msgEl = document.getElementById('formMsg');
+  if (msgEl){
+    const obs = new MutationObserver(()=>{
+      if (/thanks/i.test(msgEl.textContent)) window.DE_track('generate_lead', {method:'netlify_form'});
+    });
+    obs.observe(msgEl, {childList:true, characterData:true, subtree:true});
+  }
+
+  // Rough "complete_test" detection: look for keywords appearing later
+  setTimeout(()=>{
+    const bodyText = document.body.innerText.toLowerCase();
+    if (/(result|score|your level|niveau)/i.test(bodyText)){
+      window.DE_track('complete_test', {page: location.pathname});
+    }
+  }, 4000);
+})();
+</script>
+
+
+  <section class="section test-shell" id="demo-schrijven">
+  <h2>Schrijven • Demo questions</h2>
+  <p class="muted">Try 5 sample questions to feel the format. Your score will appear with quick recommendations.</p>
+  <details open class="card"><summary style="cursor:pointer;font-weight:800">Open/close demo</summary>
+    <div class="card" style="margin-top:10px">
+      <strong>Q1.</strong> Choose the correct email opening to a teacher:
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q1" value="0"> Hoi vriend!</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q1" value="1"> Geachte mevrouw Jansen,</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q1" value="2"> Yo!</label>
+      <input type="hidden" id="schrijven-a1" value="1">
+    </div>
+    <div class="card" style="margin-top:10px">
+      <strong>Q2.</strong> Pick the correct ending:
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q2" value="0"> Groeten,</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q2" value="1"> Met vriendelijke groet,</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q2" value="2"> Doei!</label>
+      <input type="hidden" id="schrijven-a2" value="1">
+    </div>
+    <div class="card" style="margin-top:10px">
+      <strong>Q3.</strong> Select correct sentence:
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q3" value="0"> Ik heb morgen niet tijd.</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q3" value="1"> Morgen heb ik geen tijd.</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q3" value="2"> Ik geen tijd morgen heb.</label>
+      <input type="hidden" id="schrijven-a3" value="1">
+    </div>
+    <div class="card" style="margin-top:10px">
+      <strong>Q4.</strong> Choose formal wording:
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q4" value="0"> Ik wil informatie.</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q4" value="1"> Ik zou graag informatie willen получать.</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q4" value="2"> Geef info.</label>
+      <input type="hidden" id="schrijven-a4" value="1">
+    </div>
+    <div class="card" style="margin-top:10px">
+      <strong>Q5.</strong> Pick correct spelling:
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q5" value="0"> Ik ben naar de biblotheek gegaan.</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q5" value="1"> Ik ben naar de bibliotheek gegaan.</label>
+      <label style="display:block;margin-top:6px"><input type="radio" name="schrijven-q5" value="2"> Ik ben naar de bibliootheek gegaan.</label>
+      <input type="hidden" id="schrijven-a5" value="1">
+    </div>
+    <div class="cta" style="margin-top:12px">
+      <button class="btn primary" id="schrijven-submit">Check answers</button>
+    </div>
+    <div id="schrijven-result" class="card" style="margin-top:12px; display:none"></div>
+  </details>
+</section>
+
+<script>
+(function(){ 
+  const skill = "schrijven";
+  function recommend(score, total){
+    const acc = Math.round(100*score/total);
+    const tips = [];
+    if (acc >= 80) {
+      tips.push("Great! Move to extended tasks and time yourself.");
+    } else if (acc >= 50) {
+      tips.push("Review key patterns and practice 10-15 min daily.");
+    } else {
+      tips.push("Start with basics. Focus on core vocabulary and simple sentence patterns.");
+    }
+    const map = {
+      lezen: ["Practice reading short ads and emails on overheid.nl/nos.nl.", "Highlight keywords and scan for dates/amounts."],
+      luisteren: ["Use slow news or beginner podcasts (e.g., NOS Nieuws voor Beginners).", "Listen twice: first for gist, second for details."],
+      spreken: ["Shadow short dialogues. Record yourself and compare.", "Use polite forms: 'Kunt u…', 'Zou u…'."],
+      schrijven: ["Use templates for emails: opening, reason, request, closing.", "Check word order: time – verb – subject – rest."],
+      knm: ["Read official info on rijksoverheid.nl about healthcare, work, housing.", "Know emergency numbers: 112 (emergency), 0900-8844 (non-urgent police)."]
+    };
+    (map[skill]||[]).forEach(t=>tips.push(t));
+    return {acc, tips};
+  }
+
+  function scoreDemo(){
+    const total = 5; // all have 5
+    let score = 0;
+    for (let i=1;i<=total;i++){ 
+      const given = document.querySelector(`input[name="schrijven-q${i}"]:checked`);
+      const correct = document.getElementById("schrijven-a"+i).value;
+      if (given && String(given.value) === String(correct)) score++;
+    }
+    const res = document.getElementById("schrijven-result");
+    const r = recommend(score, total);
+    const acc = r.acc, tips = r.tips;
+    res.style.display = "block";
+    res.innerHTML = `<h3>Result</h3><p>Score: <strong>${score} / ${total}</strong> • Accuracy: <strong>${acc}%</strong></p>
+    <h4>Recommendations</h4>
+    <ul>${tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+    <div class="cta" style="margin-top:8px"><a class="btn ghost" href="tests.html">Back to all tests</a> <a class="btn secondary" href="#subscribe">Get early access</a></div>`;
+    if (window.DE_track) DE_track('complete_test_schrijven', {skill: skill, score: score, total: total, accuracy: acc, page: location.pathname});
+  }
+
+  const btn = document.getElementById("schrijven-submit");
+  if (btn) btn.addEventListener("click", scoreDemo);
+})();
+</script>
+
+  </div><!--wrap-end-->
+<script src="assets/consent.js"></script>
+<script src="assets/theme.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  // Enhance GA tracking with skill context
+  document.querySelectorAll('a,button,input[type=submit]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const label = (el.textContent || el.value || '').trim();
+      if (/start|begin/i.test(label)) DE_track('start_test_schrijven', {label, page: location.pathname});
+    });
+  });
+  // Simple heuristic: mark complete when "Result" appears
+  setTimeout(()=>{
+    if (document.body.innerText.toLowerCase().includes('result')) {
+      DE_track('complete_test_schrijven', {page: location.pathname});
+    }
+  }, 4000);
+});
+</script>
+
+
+<script>
+function showRecommendations(){
+  document.getElementById('recommendations').style.display='block';
+  if (window.DE_track){
+    const skill = document.body.getAttribute('data-skill');
+    DE_track('complete_test_'+skill, {skill:skill, page: location.pathname, demo:true});
+  }
+}
+</script>
+
+</body>
+</html>
