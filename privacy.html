@@ -1,43 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-
-<script>
-// Early theme selection: prefer system setting; fallback to time-of-day (07-19 light, else dark)
-(function(){
-  try {
-    const hour = new Date().getHours();
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-    let theme = null;
-
-    if (prefersDark) theme = 'dark';
-    else if (prefersLight) theme = 'light';
-    else theme = (hour >= 7 && hour < 19) ? 'light' : 'dark'; // fallback by local time
-
-    document.documentElement.setAttribute('data-theme', theme);
-
-    // React to system changes
-    if (window.matchMedia) {
-      const mqDark = window.matchMedia('(prefers-color-scheme: dark)');
-      const mqLight = window.matchMedia('(prefers-color-scheme: light)');
-      const apply = () => {
-        const pd = mqDark.matches, pl = mqLight.matches;
-        const t = pd ? 'dark' : (pl ? 'light' : ((new Date().getHours()>=7 && new Date().getHours()<19) ? 'light':'dark'));
-        document.documentElement.setAttribute('data-theme', t);
-      };
-      mqDark.addEventListener('change', apply);
-      mqLight.addEventListener('change', apply);
-    }
-  } catch(e) {}
-})();
-</script>
-
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Privacy • DutchExam.online</title>
   <link rel="stylesheet" href="assets/brand.css"/>
-  <link rel="stylesheet" href="assets/theme.css"/>
 </head>
 <body>
   <div class="wrap">
@@ -62,6 +29,5 @@
       </div>
     </section>
   </div>
-<script src="assets/theme.js"></script>
 </body>
 </html>
