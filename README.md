@@ -1,44 +1,47 @@
-# DutchExam.online — Landing Page
 
-## ℹ️ About
-**DutchExam.online** is an online platform to help people prepare for the Dutch inburgering exam 🇳🇱.  
-This repository currently hosts the **MVP landing page**, built with HTML/CSS/JavaScript and deployed on Netlify.  
+# DutchExam.online — deploy checklist (Netlify)
 
-The landing page includes a **modern responsive design** and an **AJAX-powered subscription form** that stores leads via **Netlify Forms** (without reloading the page).
+## 1) Repository
+- Push the contents of this folder to your GitHub repository (main branch).
+- Ensure the directory structure:
+  - `index.html`, `tests.html`, `test-quick.html`, `test-extended.html`, `test-in-depth.html`
+  - `assets/` (brand.css, tests.css, consent.css, logo.svg, hero-illustration.svg, icon-512.png, apple-touch-icon.png, og-image.png)
+  - `favicon.ico`
+  - `privacy.html`
 
-## 🚀 Tech Stack
-- **Frontend:** HTML5, CSS3, Vanilla JavaScript
-- **Hosting:** Netlify
-- **Domain:** dutchexam.online
-- **Forms:** Netlify Forms (AJAX submission + modal confirmation)
+## 2) Netlify
+- Create a new site from Git (connect your repo).
+- Build settings: **no build command** (static site), **publish directory**: root of the repo.
+- Forms: Netlify Forms autodetects the form named `subscribe`.
+- Domain: connect `dutchexam.online` and `inburg.nl` (alias/redirect).
 
-## ✨ Features
-- Modern responsive UI with animated background
-- Hero section with call-to-action
-- Email capture form (AJAX, no reload)
-- Netlify Forms integration (anti-spam honeypot included)
-- Success modal with confirmation message
-- Accessible and mobile-first design
+## 3) Google Analytics (GA4)
+- Add your Measurement ID (e.g., G-XXXXXXX). Two options:
+  1. Quick inline:
+     ```html
+     <script>window.GA_MEASUREMENT_ID="G-XXXXXXX";</script>
+     ```
+     Place it in `<head>` of `index.html` (or before `</body>`).
+  2. Netlify environment variable (optional progressive enhancement):
+     - Add a `<script>` that reads `window.GA_MEASUREMENT_ID` from an injected snippet or server-side render (for fully static, option #1 is recommended).
 
-## 📦 Deployment
-1. Repository is linked with Netlify.
-2. Every push to the `main` branch triggers an automatic deploy.
-3. Custom domains configured:
-   - `dutchexam.online`
-   - `inburg.nl` (alias/redirect)
+- Consent Mode v2 is enabled by default with **analytics denied** until user consents.
+- Tracked events:
+  - `start_test` — when user begins a test (CTA click heuristic).
+  - `select_content` — CTA clicks (subscribe button).
+  - `generate_lead` — successful Netlify form submission.
+  - `complete_test` — heuristic when results are displayed.
 
-## 📧 Email Capture
-The subscription form is connected to **Netlify Forms**.  
-Leads can be viewed in the Netlify dashboard or exported as CSV.  
+## 4) i18n
+- Language switcher is present on all pages (EN/NL/RU).
+- To extend translations, search for `data-i18n` keys and update dictionaries in the shared script.
 
-> Later, integration with **Mailchimp / ConvertKit** can be added for automated newsletters and campaigns.
+## 5) QA after deploy
+- Test the subscribe form (should appear in Netlify > Forms).
+- Open with `?lang=nl` or `?lang=ru` if you want to force language (or use the selector).
+- Check favicon and social preview (share your homepage — OG image should show).
 
-## 🔜 Next Steps
-- Add backend (.NET API) for exercises and subscriptions.
-- Connect frontend app (React/Next.js) for interactive training.
-- Enhance analytics with Google Analytics & event tracking.
-- Upgrade email capture → Mailchimp or another ESP for newsletters.
-
----
-
-© 2025 DutchExam.online
+## 6) Future work
+- Replace heuristics for `complete_test` with explicit event dispatch from test logic.
+- Move legacy inline styles from test pages fully into `assets/brand.css` / `assets/tests.css`.
+- Connect ESP (Mailchimp/ConvertKit) via Netlify Functions or direct API.
