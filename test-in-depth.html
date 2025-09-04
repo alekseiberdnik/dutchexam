@@ -1,114 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<script>
+// Early theme selection: prefer system setting; fallback to time-of-day (07-19 light, else dark)
+(function(){
+  try {
+    const hour = new Date().getHours();
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+    let theme = null;
+
+    if (prefersDark) theme = 'dark';
+    else if (prefersLight) theme = 'light';
+    else theme = (hour >= 7 && hour < 19) ? 'light' : 'dark'; // fallback by local time
+
+    document.documentElement.setAttribute('data-theme', theme);
+
+    // React to system changes
+    if (window.matchMedia) {
+      const mqDark = window.matchMedia('(prefers-color-scheme: dark)');
+      const mqLight = window.matchMedia('(prefers-color-scheme: light)');
+      const apply = () => {
+        const pd = mqDark.matches, pl = mqLight.matches;
+        const t = pd ? 'dark' : (pl ? 'light' : ((new Date().getHours()>=7 && new Date().getHours()<19) ? 'light':'dark'));
+        document.documentElement.setAttribute('data-theme', t);
+      };
+      mqDark.addEventListener('change', apply);
+      mqLight.addEventListener('change', apply);
+    }
+  } catch(e) {}
+})();
+</script>
+
+  <link rel="stylesheet" href="assets/tests.css"/>
+  <link rel="stylesheet" href="assets/brand.css"/>
+  <link rel="stylesheet" href="assets/theme.css"/>
+  <link rel="stylesheet" href="assets/consent.css"/>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>DutchExam.online — In-Depth Level Test (~12 min)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#f8fafc; --paper:#ffffff; --text:#0f172a; --muted:#475569; --line:#e2e8f0;
-    --blue:#2563eb; --blue-2:#3b82f6; --blue-50:#eff6ff;
-    --yellow:#f59e0b; --yellow-2:#fde68a; --yellow-50:#fffbeb;
-    --ok:#16a34a; --bad:#ef4444;
-    --radius:18px; --shadow:0 16px 40px rgba(2,6,23,.08);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif; color:var(--text);
-    background:
-      radial-gradient(1200px 700px at 8% -10%, #eef2ff 0%, transparent 60%),
-      radial-gradient(1200px 700px at 92% 0%, #fff7cc 0%, transparent 60%),
-      var(--bg);
-  }
-  .wrap{max-width:1200px; margin:0 auto; padding:22px 16px 80px}
-  .grid{display:grid; grid-template-columns:300px 1fr; gap:18px}
-  @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+<!-- inline styles moved to assets/tests.css -->
 
-  /* SIDEBAR */
-  .side{
-    position:sticky; top:16px;
-    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
-    box-shadow:var(--shadow); padding:18px;
-  }
-  .side h3{margin:6px 0 8px; font-size:1.1rem}
-  .pill{display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; font-size:.9rem}
-  .pill-blue{background:var(--blue-50); color:var(--blue); border:1px solid #bfdbfe}
-  .pill-yellow{background:var(--yellow-50); color:#8d5c00; border:1px solid #fde68a}
-  .kv{display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; margin:8px 0}
-  .val{font-weight:800}
-  .barwrap{height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0}
-  .bar{height:100%; width:0%; background:linear-gradient(90deg,#34d399,#22c55e); transition:width .25s ease}
-
-  /* MAIN */
-  .card{
-    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
-    box-shadow:var(--shadow); padding:22px; margin-bottom:18px;
-  }
-  h1{font-size: clamp(1.8rem, 1.6rem + 1.8vw, 2.6rem); margin:4px 0 6px; letter-spacing:-.02em}
-  p.lead{color:var(--muted); margin:0 0 10px}
-  .progress{height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; margin:10px 0 16px}
-  .progress .pbar{height:100%; width:0%; background:linear-gradient(90deg, var(--blue-2), var(--blue)); transition:width .25s ease}
-
-  .qtitle{font-weight:800; margin:2px 0 8px}
-  .qmeta{color:var(--muted); font-size:.95rem; margin-bottom:6px}
-
-  .input{
-    display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:12px;
-    background:#fff; border:1px solid var(--line);
-  }
-  .input input{flex:1; border:0; outline:0; background:transparent; font-size:1rem; color:var(--text)}
-
-  textarea.textarea{
-    width:100%; min-height:120px; padding:12px 14px; border-radius:12px; border:1px solid var(--line);
-    font-family:inherit; font-size:1rem; resize:vertical; background:#fff;
-  }
-  .muted{color:var(--muted)}
-
-  .opts{display:grid; gap:10px; margin-top:12px}
-  .opt{
-    border:1px solid var(--line); background:#fff; padding:12px 14px; border-radius:12px; cursor:pointer; text-align:left;
-    transition: border-color .15s ease, background .15s ease, transform .08s ease, box-shadow .15s ease;
-  }
-  .opt:hover{transform:translateY(-1px); border-color:#bfdbfe; box-shadow:0 8px 18px rgba(2,6,23,.06)}
-  .opt.correct{outline:2px solid var(--ok); background:#f0fdf4}
-  .opt.wrong{outline:2px solid var(--bad); background:#fef2f2}
-
-  .tokens, .slots{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-  .token, .slot{
-    user-select:none;
-    border:1px dashed #bfdcff; background:var(--blue-50); color:var(--blue);
-    padding:8px 10px; border-radius:10px; cursor:pointer; min-width:44px; text-align:center; font-weight:700;
-  }
-  .slot{ background:#fff; border:1px dashed #94a3b8; color:#64748b }
-  .slot.filled{border-style:solid}
-  .token.dragging{opacity:.6}
-
-  select.select{
-    padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:#fff; font-weight:600
-  }
-  .textblock{background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px}
-
-  .btns{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px}
-  .btn{
-    appearance:none; border:0; border-radius:12px; cursor:pointer; padding:12px 16px; font-weight:800;
-    transition: transform .16s ease, box-shadow .2s ease, filter .2s ease;
-  }
-  .btn:hover{transform:translateY(-2px)}
-  .primary{color:#fff; background:linear-gradient(180deg,var(--blue-2),var(--blue)); box-shadow:0 10px 24px rgba(37,99,235,.22)}
-  .secondary{background:linear-gradient(180deg,var(--yellow-2),var(--yellow)); color:#0f172a; box-shadow:0 10px 24px rgba(245,158,11,.22)}
-  .ghost{background:#fff; border:1px solid var(--line); color:#0f172a}
-  .status{font-weight:700; margin-top:6px}
-  .ok{color:var(--ok)} .bad{color:var(--bad)}
-
-  .result{display:none}
-  .center{text-align:center}
-
-  .topnav{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
-  .brand{font-weight:800}
-  .topnav a{color:var(--blue); text-decoration:none; font-weight:700}
-</style>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
+  <meta property="og:title" content="DutchExam.online — Inburgering Prep"/>
+  <meta property="og:description" content="Prepare for the Dutch inburgering exam with DutchExam.online"/>
+  <meta property="og:image" content="assets/og-preview.svg"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://dutchexam.online"/>
+    
 </head>
 <body>
   <div class="wrap">
@@ -120,22 +61,22 @@
     <div class="grid">
       <!-- SIDEBAR -->
       <aside class="side" id="sidebar">
-        <h3>Текущий уровень</h3>
+        <h3>Current level</h3>
         <div id="levelBadge" class="pill pill-blue">—</div>
 
         <div class="kv">
-          <div>Точность</div>
+          <div>Accuracy</div>
           <div class="val"><span id="accVal">—</span></div>
         </div>
         <div class="barwrap"><div id="accBar" class="bar" style="width:0%"></div></div>
 
         <div class="kv">
-          <div>Баллов</div>
+          <div>Points</div>
           <div class="val"><span id="pointsVal">0</span></div>
         </div>
 
         <div class="kv">
-          <div>Вопрос</div>
+          <div>Question</div>
           <div class="val"><span id="qpos">1</span>/<span id="qtotal">18</span></div>
         </div>
 
@@ -146,7 +87,7 @@
       <!-- MAIN -->
       <main>
         <section class="card">
-          <h1>In-Depth Dutch level test</h1>
+          \1<span data-i18n="test.title">\2</span>\3
           <p class="lead">Tests longer texts and includes writing checks. We’ll estimate your level as you go.</p>
           <div class="progress"><div id="pbar" class="pbar"></div></div>
           <div class="qmeta" id="qmeta"></div>
@@ -167,7 +108,7 @@
 
         <!-- RESULT -->
         <section class="card result" id="resultCard">
-          <h2 class="center">Your in-depth test result</h2>
+          \1<span data-i18n="test.subtitle">\2</span>\3
           <p class="center"><strong>Score:</strong> <span id="finalPoints">0</span> / <span id="finalTotal">0</span> •
             <strong>Accuracy:</strong> <span id="finalAcc">0%</span></p>
           <p class="center"><strong>Estimated level:</strong> <span id="finalLevel">—</span></p>
@@ -632,5 +573,185 @@ document.getElementById('againBtn').addEventListener('click', restart);
 updateMeters();
 render();
 </script>
+
+<!-- Google Analytics placeholder -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_MEASUREMENT_ID');
+</script>
+
+<script>// TODO: extend dict with test page keys</script>
+
+<script>
+// ===== Language dictionary (extended for test UI) =====
+window.DE_DICT = (function(){
+  const dict = {
+    en: {
+      "nav.tests":"Level tests",
+      "cta.leveltest":"Take a free level test →",
+      "cta.early":"Get early access",
+      "ui.start":"Start",
+      "ui.begin":"Begin",
+      "ui.next":"Next",
+      "ui.back":"Back",
+      "ui.submit":"Submit",
+      "ui.finish":"Finish",
+      "ui.result":"Your result",
+      "ui.score":"Score",
+      "ui.tryagain":"Try again",
+      "ui.minutes":"minutes"
+    },
+    nl: {
+      "nav.tests":"Toetsen",
+      "cta.leveltest":"Doe een gratis niveautoets →",
+      "cta.early":"Vroege toegang",
+      "ui.start":"Starten",
+      "ui.begin":"Beginnen",
+      "ui.next":"Volgende",
+      "ui.back":"Terug",
+      "ui.submit":"Verzenden",
+      "ui.finish":"Afronden",
+      "ui.result":"Jouw resultaat",
+      "ui.score":"Score",
+      "ui.tryagain":"Opnieuw proberen",
+      "ui.minutes":"minuten","cookie.settings":"Cookie settings" }
+    ,
+    ru: {
+      "nav.tests":"Тесты уровня",
+      "cta.leveltest":"Пройти бесплатный тест уровня →",
+      "cta.early":"Ранний доступ",
+      "ui.start":"Начать",
+      "ui.begin":"Старт",
+      "ui.next":"Далее",
+      "ui.back":"Назад",
+      "ui.submit":"Отправить",
+      "ui.finish":"Завершить",
+      "ui.result":"Ваш результат",
+      "ui.score":"Pointsы",
+      "ui.tryagain":"Попробовать снова",
+      "ui.minutes":"минут"
+    }
+  };
+  return dict;
+})();
+
+// Apply dictionary to elements with data-i18n
+function applyI18n(lang) {
+  const dict = window.DE_DICT || {};
+  const map = dict[lang] || dict.en || {};
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    if (map[key]) el.textContent = map[key];
+  });
+  localStorage.setItem("lang", lang);
+}
+
+// Try translating common buttons by their current text -> keys
+function translateButtonsByHeuristics(lang){
+  const map = (window.DE_DICT && (window.DE_DICT[lang]||window.DE_DICT.en)) || {};
+  const pairs = [
+    [/^(start|begin)$/i, "ui.start"],
+    [/^begin$/i, "ui.begin"],
+    [/^(next|volgende|далее)$/i, "ui.next"],
+    [/^(back|terug|назад)$/i, "ui.back"],
+    [/^(submit|verzenden|отправить)$/i, "ui.submit"],
+    [/^(finish|afronden|завершить)$/i, "ui.finish"],
+    [/^(result|jouw resultaat|ваш результат)$/i, "ui.result"],
+    [/^(score|баллы)$/i, "ui.score"],
+    [/^(try again|opnieuw proberen|попробовать снова)$/i, "ui.tryagain"]
+  ];
+  document.querySelectorAll("button, input[type=button], input[type=submit], a").forEach(el=>{
+    const txt = (el.textContent || el.value || "").trim();
+    for (const [re, key] of pairs){
+      if (re.test(txt) && map[key]){
+        if (el.tagName === "INPUT") el.value = map[key]; else el.textContent = map[key];
+        el.setAttribute("data-i18n", key);
+        break;
+      }
+    }
+  });
+}
+
+// Language init on every page
+(function(){
+  const sel = document.getElementById("lang");
+  const urlLang = new URLSearchParams(location.search).get("lang");
+  const saved = (urlLang || localStorage.getItem("lang") || "en");
+  if (sel) sel.value = saved;
+  applyI18n(saved);
+  translateButtonsByHeuristics(saved);
+  if (sel) sel.addEventListener("change", e => { applyI18n(e.target.value); translateButtonsByHeuristics(e.target.value); });
+})();
+
+// ===== Consent Mode v2 + GA4 scaffold =====
+(function(){
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} window.gtag = gtag;
+
+  const GA_ID = window.GA_MEASUREMENT_ID || "G-Y4884MKS1T";
+  // Consent defaults (denied)
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'ad_personalization': 'denied',
+    'ad_user_data': 'denied',
+    'analytics_storage': 'denied',
+    'functionality_storage': 'granted', // allow i18n save
+    'security_storage': 'granted'
+  });
+
+  // Helper to grant analytics when user interacts meaningfully (you can wire to your own consent UI)
+  window.DE_openConsent = function(){ const el = document.getElementById('de-consent'); if (el) el.classList.add('show'); };
+  window.DE_grantAnalytics = function(){
+    gtag('consent', 'update', {'analytics_storage': 'granted'});
+  };
+
+  // Load GA if ID set
+  if (GA_ID && GA_ID !== "G-Y4884MKS1T"){
+    const s = document.createElement('script'); s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(s);
+    gtag('js', new Date()); gtag('config', GA_ID);
+  }
+
+  // Generic tracker
+  window.DE_track = function(ev, params={}){ if (window.gtag) gtag('event', ev, params); };
+
+  // CTA & test start tracking
+  document.addEventListener('click', (e)=>{
+    const t = e.target.closest('a,button,input[type=submit]');
+    if (!t) return;
+    const label = (t.textContent || t.value || '').trim().slice(0,80);
+    if (/test|start|begin/i.test(label)) window.DE_track('start_test', {label, page: location.pathname});
+    if (/subscribe|notify/i.test(label)) window.DE_track('select_content', {content_type:'cta', item_id:'subscribe_button'});
+    // Grant analytics after first meaningful interaction (soft consent)
+    window.DE_grantAnalytics();
+  });
+
+  // Subscribe success -> generate_lead
+  const msgEl = document.getElementById('formMsg');
+  if (msgEl){
+    const obs = new MutationObserver(()=>{
+      if (/thanks/i.test(msgEl.textContent)) window.DE_track('generate_lead', {method:'netlify_form'});
+    });
+    obs.observe(msgEl, {childList:true, characterData:true, subtree:true});
+  }
+
+  // Rough "complete_test" detection: look for keywords appearing later
+  setTimeout(()=>{
+    const bodyText = document.body.innerText.toLowerCase();
+    if (/(result|score|your level|niveau)/i.test(bodyText)){
+      window.DE_track('complete_test', {page: location.pathname});
+    }
+  }, 4000);
+})();
+</script>
+
+
+  </div><!--wrap-end-->
+<script src="assets/consent.js"></script>
+<script src="assets/theme.js"></script>
 </body>
 </html>
