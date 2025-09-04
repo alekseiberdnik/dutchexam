@@ -1,15 +1,1 @@
-
-/* Safe overrides for legacy test pages */
-body { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:#e6eefc; background:#0a0f1a; }
-a, button { font-family: inherit; }
-.container, .wrap { max-width: 1200px; margin-inline:auto; padding-inline: clamp(16px, 3vw, 28px); }
-header, .topbar { background:transparent; }
-.test-shell { background:#0f1726; border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,.35); }
-button, .btn, input[type=button], input[type=submit] {
-  border-radius:12px; border:0; padding:10px 14px; font-weight:700; cursor:pointer;
-  background:linear-gradient(180deg,#ffcf8a,#ff6f00); color:#0a0f1a;
-}
-button.secondary, .btn.secondary { background:linear-gradient(180deg,#4f6db5,#1e3a8a); color:#fff; }
-input[type=text], input[type=email], input[type=tel], select, textarea {
-  background:#0c1324; color:#e6eefc; border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px;
-}
+html,body{min-height:100%}img,video,canvas,svg{max-width:100%;height:auto}p,ul,ol{margin:0 0 10px}.test-shell{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}.answers{display:block;margin-top:6px}input[type=text],input[type=email],textarea,select{width:100%;background:#f8fafc;color:#0b1220;border:1px solid rgba(2,6,23,.12);border-radius:12px;padding:10px 12px}
