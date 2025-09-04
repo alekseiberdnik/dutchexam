@@ -239,7 +239,39 @@
     </section>
   </main>
 
-  <footer>
+  
+<section id="subscribe" class="section" style="background:linear-gradient(180deg, rgba(59,130,246,.05), transparent)">
+  <div class="wrap">
+    <h2>Stay updated</h2>
+    <p class="lead">Get new practice sets and exam tips by email. No spam — just useful Dutch learning material.</p>
+    <form name="subscribe" method="POST" data-netlify="true" netlify-honeypot="bot-field"
+          id="subscribe-form" style="margin-top:16px;max-width:420px">
+      <input type="hidden" name="form-name" value="subscribe"/>
+      <p style="display:none"><label>Don’t fill this out if you’re human: <input name="bot-field"/></label></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input type="email" name="email" required placeholder="Your email"
+               style="flex:1;padding:12px;border-radius:12px;border:1px solid var(--line);font-size:16px"/>
+        <button type="submit" class="btn primary">Subscribe</button>
+      </div>
+    </form>
+    <div id="subscribe-success" class="card" style="margin-top:12px;display:none">
+      <strong>Thanks!</strong> You’re now subscribed.
+    </div>
+  </div>
+</section>
+<script>
+document.getElementById("subscribe-form").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const form=this;
+  const data=new FormData(form);
+  await fetch("/", {method:"POST", body:data});
+  form.style.display="none";
+  document.getElementById("subscribe-success").style.display="block";
+  if(window.DE_track) DE_track("subscribe",{email:data.get("email")});
+});
+</script>
+
+<footer>
     <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
       <div class="muted">© <span id="year"></span> DutchExam.online</div>
       <div><a href="tests.html">All tests</a> · <a href="results.html">My results</a></div>
