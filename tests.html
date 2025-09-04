@@ -1,157 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="assets/brand.css"/>
-  <link rel="stylesheet" href="assets/tests.css"/>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DutchExam.online — Level Tests</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#f8fafc; --paper:#ffffff; --text:#0f172a; --muted:#475569; --line:#e2e8f0;
-      --blue:#2563eb; --blue-2:#3b82f6; --blue-50:#eff6ff;
-      --yellow:#f59e0b; --yellow-2:#fde68a; --yellow-50:#fffbeb;
-      --radius:20px; --pad:42px; --shadow:0 16px 40px rgba(2,6,23,.08);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif; color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 8% -10%, #eef2ff 0%, transparent 60%),
-        radial-gradient(1200px 700px at 92% 0%, #fff7cc 0%, transparent 60%),
-        var(--bg);
-    }
-    .wrap{max-width:1180px; margin:0 auto; padding:32px 20px 100px}
-    .section{
-      background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
-      padding:var(--pad); box-shadow:var(--shadow); margin:28px 0;
-    }
-    @media (max-width:720px){ .section{padding:26px} }
-    h1{font-weight:800; letter-spacing:-.02em; line-height:1.06; font-size:clamp(2rem,2.6vw+1rem,3.2rem); margin:0 0 10px}
-    h2{font-weight:800; font-size:clamp(1.6rem,.9vw+1.2rem,2rem); margin:0 0 12px}
-    p.lead{font-size:clamp(1.05rem,.6vw+.9rem,1.22rem); color:var(--muted); margin:0}
-    .eyebrow{
-      display:inline-flex; gap:10px; align-items:center; font-weight:700;
-      color:#0b1e6b; background:linear-gradient(90deg, var(--yellow-50), var(--blue-50));
-      border:1px solid #bfdbfe; padding:8px 12px; border-radius:999px;
-    }
-    .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
-    .btn{
-      appearance:none; border:0; border-radius:14px; cursor:pointer;
-      padding:14px 18px; font-weight:800; font-size:1.05rem;
-      background:linear-gradient(180deg,var(--yellow-2),var(--yellow)); color:#0f172a;
-      box-shadow:0 10px 26px rgba(245,158,11,.22);
-      transition:transform .16s ease, box-shadow .2s ease, filter .2s ease;
-      text-decoration:none; display:inline-block; text-align:center;
-    }
-    .btn:hover{transform:translateY(-2px); filter:saturate(110%); box-shadow:0 14px 30px rgba(245,158,11,.3)}
-    .btn.primary{color:#fff; background:linear-gradient(180deg,var(--blue-2),var(--blue)); box-shadow:0 10px 26px rgba(37,99,235,.22)}
-    .btn.primary:hover{box-shadow:0 14px 30px rgba(37,99,235,.3)}
-    .btn[disabled]{opacity:.6; cursor:not-allowed}
+ <link rel="stylesheet" href="assets/brand.css"/>
+ <link rel="stylesheet" href="assets/tests.css"/>
+ <link rel="stylesheet" href="assets/progress.css"/>
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+ <title>DutchExam.online — Level Tests</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+ <style>
+ :root{
+ --bg:#f8fafc; --paper:#ffffff; --text:#0f172a; --muted:#475569; --line:#e2e8f0;
+ --blue:#2563eb; --blue-2:#3b82f6; --blue-50:#eff6ff;
+ --yellow:#f59e0b; --yellow-2:#fde68a; --yellow-50:#fffbeb;
+ --radius:20px; --pad:42px; --shadow:0 16px 40px rgba(2,6,23,.08);
+ }
+ *{box-sizing:border-box}
+ html,body{height:100%}
+ body{
+ margin:0; font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif; color:var(--text);
+ background:
+ radial-gradient(1200px 700px at 8% -10%, #eef2ff 0%, transparent 60%),
+ radial-gradient(1200px 700px at 92% 0%, #fff7cc 0%, transparent 60%),
+ var(--bg);
+ }
+ .wrap{max-width:1180px; margin:0 auto; padding:32px 20px 100px}
+ .section{
+ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+ padding:var(--pad); box-shadow:var(--shadow); margin:28px 0;
+ }
+ @media (max-width:720px){ .section{padding:26px} }
+ h1{font-weight:800; letter-spacing:-.02em; line-height:1.06; font-size:clamp(2rem,2.6vw+1rem,3.2rem); margin:0 0 10px}
+ h2{font-weight:800; font-size:clamp(1.6rem,.9vw+1.2rem,2rem); margin:0 0 12px}
+ p.lead{font-size:clamp(1.05rem,.6vw+.9rem,1.22rem); color:var(--muted); margin:0}
+ .eyebrow{
+ display:inline-flex; gap:10px; align-items:center; font-weight:700;
+ color:#0b1e6b; background:linear-gradient(90deg, var(--yellow-50), var(--blue-50));
+ border:1px solid #bfdbfe; padding:8px 12px; border-radius:999px;
+ }
+ .cta{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px}
+ .btn{
+ appearance:none; border:0; border-radius:14px; cursor:pointer;
+ padding:14px 18px; font-weight:800; font-size:1.05rem;
+ background:linear-gradient(180deg,var(--yellow-2),var(--yellow)); color:#0f172a;
+ box-shadow:0 10px 26px rgba(245,158,11,.22);
+ transition:transform .16s ease, box-shadow .2s ease, filter .2s ease;
+ text-decoration:none; display:inline-block; text-align:center;
+ }
+ .btn:hover{transform:translateY(-2px); filter:saturate(110%); box-shadow:0 14px 30px rgba(245,158,11,.3)}
+ .btn.primary{color:#fff; background:linear-gradient(180deg,var(--blue-2),var(--blue)); box-shadow:0 10px 26px rgba(37,99,235,.22)}
+ .btn.primary:hover{box-shadow:0 14px 30px rgba(37,99,235,.3)}
+ .btn[disabled]{opacity:.6; cursor:not-allowed}
 
-    .grid-2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px}
-    @media (max-width:980px){ .grid-2{grid-template-columns:1fr} }
+ .grid-2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px}
+ @media (max-width:980px){ .grid-2{grid-template-columns:1fr} }
 
-    .card{background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow)}
-    .muted{color:var(--muted)}
-    footer{margin-top:22px; text-align:center; color:var(--muted); font-size:.9rem}
-    a.link{color:var(--blue); text-decoration:none; border-bottom:1px dotted #bfdbfe}
+ .card{background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:var(--shadow)}
+ .muted{color:var(--muted)}
+ footer{margin-top:22px; text-align:center; color:var(--muted); font-size:.9rem}
+ a.link{color:var(--blue); text-decoration:none; border-bottom:1px dotted #bfdbfe}
 
-    /* top nav */
-    .topnav{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
-    .brand{font-weight:800}
-    .topnav a{color:var(--blue); text-decoration:none; font-weight:700}
-  </style>
+ /* top nav */
+ .topnav{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+ .brand{font-weight:800}
+ .topnav a{color:var(--blue); text-decoration:none; font-weight:700}
+ </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="topnav">
-      <div class="brand">DutchExam.online</div>
-      <div><a href="index.html">← Back</a></div>
-    </div>
+ <div class="wrap">
+ <div class="topnav">
+ <div class="brand">DutchExam.online</div>
+ <div><a href="index.html">← Back</a></div>
+ </div>
 
-    <!-- HERO -->
-    <section class="section">
-      <span class="eyebrow">DutchExam.online — AI-ready assessment</span>
-      <h1>Determine your Dutch level</h1>
-      <p class="lead">From <strong>5 minutes</strong>, up to <strong>95% accuracy</strong>. Take a test and find out how well you read, write, speak, and understand Dutch.</p>
-      <div class="cta">
-        <a class="btn primary" href="#variants">Choose a test</a>
-      </div>
-    </section>
+ <!-- HERO -->
+ <section class="section">
+ <span class="eyebrow">DutchExam.online — AI-ready assessment</span>
+ <h1>Determine your Dutch level</h1>
+ <p class="lead">From <strong>5 minutes</strong>, up to <strong>95% accuracy</strong>. Take a test and find out how well you read, write, speak, and understand Dutch.</p>
+ <div class="cta">
+ <a class="btn primary" href="#variants">Choose a test</a>
+ </div>
+ </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="section">
-      <h2>How we determine your level</h2>
-      <div class="grid-2" style="margin-top:14px">
-        <div class="card" style="border-color:#bfdbfe">
-          <h3 style="margin:0 0 6px; color:#2563eb">Adaptive</h3>
-          <p class="muted">We start with simpler questions and move to harder ones. The test adapts to your answers.</p>
-        </div>
-        <div class="card" style="border-color:#fde68a">
-          <h3 style="margin:0 0 6px; color:#9a6700">Accurate</h3>
-          <p class="muted">The more tasks you complete, the more precisely we estimate your level.</p>
-        </div>
-      </div>
-    </section>
+ <!-- HOW IT WORKS -->
+ <section class="section">
+ <h2>How we determine your level</h2>
+ <div class="grid-2" style="margin-top:14px">
+ <div class="card" style="border-color:#bfdbfe">
+ <h3 style="margin:0 0 6px; color:#2563eb">Adaptive</h3>
+ <p class="muted">We start with simpler questions and move to harder ones. The test adapts to your answers.</p>
+ </div>
+ <div class="card" style="border-color:#fde68a">
+ <h3 style="margin:0 0 6px; color:#9a6700">Accurate</h3>
+ <p class="muted">The more tasks you complete, the more precisely we estimate your level.</p>
+ </div>
+ </div>
+ </section>
 
-    <!-- VARIANTS -->
-    <section class="section" id="variants">
-      <h2>Choose your test</h2>
-      <p class="lead">Pick the format that fits your time and goals.</p>
-
-      <div class="grid-2" style="margin-top:18px">
-        <!-- QUICK -->
-        <div class="card">
-          <h3 style="margin:0 0 6px">1) Quick — ~5 minutes</h3>
-          <p class="muted">A fast survey across the main topics.</p>
-          <div class="cta" style="margin-top:12px">
-            <a class="btn primary" href="test-quick.html">Start</a>
-          </div>
-        </div>
-
-        <!-- EXTENDED -->
-        <div class="card">
-          <h3 style="margin:0 0 6px">2) Extended — ~10 minutes</h3>
-          <p class="muted">Best balance between time and accuracy.</p>
-          <div class="cta" style="margin-top:12px">
-            <a class="btn primary" href="test-extended.html">Start</a>
-          </div>
-        </div>
-
-        <!-- IN-DEPTH -->
-        <div class="card">
-          <h3 style="margin:0 0 6px">3) In-Depth — ~12 minutes</h3>
-          <p class="muted">Tests longer texts and includes writing checks.</p>
-          <div class="cta" style="margin-top:12px">
-            <a class="btn primary" href="test-in-depth.html">Start</a>
-          </div>
-        </div>
-
-        <!-- COMPREHENSIVE -->
-        <div class="card" style="border-color:#fde68a">
-          <h3 style="margin:0 0 6px">4) Comprehensive — ~30 minutes</h3>
-          <p class="muted">Full check of all skills with AI, including speaking, with a timer.</p>
-          <div class="cta" style="margin-top:12px">
-            <button class="btn" disabled title="In development">In development</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <section class="section" style="text-align:center">
-      <p class="muted">Questions? <a class="link" href="mailto:info@dutchexam.online">info@dutchexam.online</a></p>
-      <footer>© <span id="year"></span> DutchExam.online</footer>
-    </section>
+ <!-- VARIANTS -->
+ 
+<section class="section" id="variants">
+  <h2>Choose your test</h2>
+  <p class="lead">Inburgering skills + full in‑depth level check.</p>
+  <div class="grid-3" style="margin-top:14px">
+    <div class="card"><h3>Lezen — Reading</h3><p class="muted">Understand written texts and tasks.</p><div class="cta"><a class="btn secondary" href="test-lezen.html">Start</a></div></div>
+    <div class="card"><h3>Luisteren — Listening</h3><p class="muted">Comprehension of spoken Dutch.</p><div class="cta"><a class="btn secondary" href="test-luisteren.html">Start</a></div></div>
+    <div class="card"><h3>Spreken — Speaking</h3><p class="muted">Express yourself clearly in Dutch.</p><div class="cta"><a class="btn secondary" href="test-spreken.html">Start</a></div></div>
+    <div class="card"><h3>Schrijven — Writing</h3><p class="muted">Write messages, emails, short texts.</p><div class="cta"><a class="btn secondary" href="test-schrijven.html">Start</a></div></div>
+    <div class="card"><h3>KNM — Kennis van de Nederlandse Maatschappij</h3><p class="muted">Civic integration knowledge.</p><div class="cta"><a class="btn secondary" href="test-knm.html">Start</a></div></div>
+    <div class="card"><h3>Free level test — In‑Depth (~12 minutes)</h3><p class="muted">Mixed tasks with a timer and detailed analysis.</p><div class="cta"><a class="btn secondary" href="test-in-depth.html">Start</a></div></div>
   </div>
+</section>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+
+ <!-- FOOTER -->
+ <section class="section" style="text-align:center">
+ <p class="muted">Questions? <a class="link" href="mailto:info@dutchexam.online">info@dutchexam.online</a></p>
+ <footer>© <span id="year"></span> DutchExam.online</footer>
+ </section>
+ </div>
+
+ <script>
+ document.getElementById('year').textContent = new Date().getFullYear();
+ </script>
 
 </div><!--wrap-end-->
 </body>
