@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DutchExam — Admin</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <link rel="icon" href="assets/favicon.png">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <div class="brand"><div class="logo"></div> Admin Panel</div>
+        <div style="display:flex; gap:10px;">
+          <a class="btn btn-outline" href="index.html">← Back</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card" id="loginCard">
+      <h2>Login</h2>
+      <p class="notice">Demo login (client-side only for MVP). Replace with Supabase Auth in production.</p>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div>
+          <label>Username</label>
+          <input id="username" placeholder="admin">
+        </div>
+        <div>
+          <label>Password</label>
+          <input id="password" type="password" placeholder="admin123">
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:10px">
+        <button class="btn" id="loginBtn">Login</button>
+        <button class="btn btn-outline" id="toggleMode">Mode: Demo (Local)</button>
+      </div>
+      <p id="loginStatus" class="notice"></p>
+    </section>
+
+    <section class="card" id="adminCard" style="display:none">
+      <h2>Questions</h2>
+      <form id="qForm" class="grid">
+        <div>
+          <label>Exam Slug</label>
+          <input id="examSlug" placeholder="reading-a2-demo-1" required>
+        </div>
+        <div>
+          <label>Question (HTML allowed)</label>
+          <textarea id="stem" rows="3" placeholder="Je ziet een bord: ... ?" required></textarea>
+        </div>
+        <div class="grid" style="grid-template-columns:repeat(4,1fr)">
+          <input id="c1" placeholder="Choice A" required>
+          <input id="c2" placeholder="Choice B" required>
+          <input id="c3" placeholder="Choice C">
+          <input id="c4" placeholder="Choice D">
+        </div>
+        <div>
+          <label>Correct (A/B/C/D)</label>
+          <input id="correct" placeholder="B" required>
+        </div>
+        <div>
+          <label>Explanation</label>
+          <input id="explanation" placeholder="Why this is correct">
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn" type="submit">Add Question</button>
+          <button class="btn btn-outline" type="button" id="clearBtn">Clear</button>
+        </div>
+      </form>
+
+      <h3 style="margin-top:24px">Existing</h3>
+      <table class="table" id="qTable">
+        <thead><tr><th>Exam</th><th>Question</th><th>Correct</th><th>Actions</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="notice" id="adminNotice">Demo mode saves to localStorage. Configure Supabase in <code>scripts/supabase.js</code> to sync.</p>
+    </section>
+  </main>
+
+  <script src="scripts/admin.js"></script>
+</body>
+</html>
