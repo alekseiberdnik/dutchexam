@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Dashboard &mdash; DutchExam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <script type="module" src="/assets/js/cookies.js"></script>
+    <script type="module" src="/assets/js/dashboard.js"></script>
+    <script type="module" src="/assets/js/logout.js"></script>
+  </head>
+  <body>
+    <div class="site-wrapper">
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo">
+      <div class="logo-badge">NL</div>
+      <span>DutchExam</span>
+    </a>
+    <nav class="nav">
+      <div class="nav-group">
+        <button class="nav-link btn-ghost" type="button">Our tests ▾</button>
+        <div class="nav-dropdown">
+          <a href="/tests/quick.html">Quick test (15 min)</a>
+          <a href="/tests/deep.html">Deep test (45 min)</a>
+          <a href="#" aria-disabled="true">Full exam <span>Coming soon</span></a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-link btn-ghost" type="button">About ▾</button>
+        <div class="nav-dropdown">
+          <a href="/about.html">Overview</a>
+          <a href="/faq.html">FAQ</a>
+          <a href="/terms.html">Terms &amp; privacy</a>
+        </div>
+      </div>
+      <div class="nav-auth">
+        <a href="/app/login.html" class="btn btn-outline">Log in</a>
+        <a href="/app/signup.html" class="btn btn-primary">Sign up</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+      <main class="main">
+        <section class="section">
+          <div class="container">
+            <div class="test-layout">
+              <div class="test-header">
+                <div>
+                  <h1 style="margin:0 0 0.2rem;font-size:1.3rem;">Your practice overview</h1>
+                  <div style="font-size:0.85rem;color:#6b7280;">
+                    Logged in as <span id="user-email"></span> &middot; Role: <span id="user-role"></span>
+                  </div>
+                </div>
+                <button id="logout-btn" class="btn btn-outline">Log out</button>
+              </div>
+
+              <div class="features-grid">
+                <div class="feature-card">
+                  <div class="feature-icon">🧮</div>
+                  <h3>Total questions answered</h3>
+                  <p style="font-size:1.4rem;margin:0.3rem 0 0;"><span id="stat-total">0</span></p>
+                  <p style="font-size:0.85rem;color:#6b7280;">Across all practice sessions.</p>
+                </div>
+                <div class="feature-card">
+                  <div class="feature-icon">✅</div>
+                  <h3>Approx. correct rate</h3>
+                  <p style="font-size:1.4rem;margin:0.3rem 0 0;"><span id="stat-correct">–</span></p>
+                  <p style="font-size:0.85rem;color:#6b7280;">Percentage of correct answers.</p>
+                </div>
+              </div>
+
+              <div style="margin-top:1.5rem;">
+                <h2 style="font-size:1rem;margin-bottom:0.5rem;">Start a new session</h2>
+                <div class="chip-row">
+                  <a href="/app/practice.html?set=quick" class="chip active">Quick test (15 min)</a>
+                  <a href="/app/practice.html?set=deep" class="chip">Deep test (45 min)</a>
+                  <span class="chip">Full exam &mdash; soon</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-title">DutchExam</div>
+      <p>Practice Dutch Reading &amp; KNM for the integration exam. Quick diagnostic tests, clear feedback.</p>
+    </div>
+    <div>
+      <div class="footer-title">Product</div>
+      <a href="/tests/quick.html">Quick test</a>
+      <a href="/tests/deep.html">Deep test</a>
+      <span class="tag-soon">Full exam &mdash; soon</span>
+    </div>
+    <div>
+      <div class="footer-title">Company</div>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+    </div>
+    <div>
+      <div class="footer-title">Legal</div>
+      <a href="/terms.html">Terms of use</a>
+      <a href="/privacy.html">Privacy policy</a>
+      <a href="/cookies.html">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+  </body>
+</html>
