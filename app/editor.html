@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Question editor &mdash; DutchExam</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/assets/css/base.css" />
+    <link rel="stylesheet" href="/assets/css/layout.css" />
+    <link rel="stylesheet" href="/assets/css/components.css" />
+    <script type="module" src="/assets/js/cookies.js"></script>
+    <script type="module" src="/assets/js/editor.js"></script>
+  </head>
+  <body>
+    <div class="site-wrapper">
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="/" class="logo">
+      <div class="logo-badge">NL</div>
+      <span>DutchExam</span>
+    </a>
+    <nav class="nav">
+      <div class="nav-group">
+        <button class="nav-link btn-ghost" type="button">Our tests ▾</button>
+        <div class="nav-dropdown">
+          <a href="/tests/quick.html">Quick test (15 min)</a>
+          <a href="/tests/deep.html">Deep test (45 min)</a>
+          <a href="#" aria-disabled="true">Full exam <span>Coming soon</span></a>
+        </div>
+      </div>
+      <div class="nav-group">
+        <button class="nav-link btn-ghost" type="button">About ▾</button>
+        <div class="nav-dropdown">
+          <a href="/about.html">Overview</a>
+          <a href="/faq.html">FAQ</a>
+          <a href="/terms.html">Terms &amp; privacy</a>
+        </div>
+      </div>
+      <div class="nav-auth">
+        <a href="/app/login.html" class="btn btn-outline">Log in</a>
+        <a href="/app/signup.html" class="btn btn-primary">Sign up</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+      <main class="main">
+        <section class="section">
+          <div class="container">
+            <div class="test-layout">
+              <h1 style="margin-top:0;font-size:1.2rem;">Question editor</h1>
+              <p style="font-size:0.85rem;color:#6b7280;">
+                Only editors and admins can access this page. Use it to add new Reading and KNM questions.
+              </p>
+
+              <form id="editor-form" style="margin-top:1rem;">
+                <div class="form-field">
+                  <label class="form-label" for="skill">Skill</label>
+                  <select id="skill" name="skill">
+                    <option value="Reading">Reading</option>
+                    <option value="KNM">KNM</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="category">Category</label>
+                  <input id="category" name="category" class="input" placeholder="e.g. Work, Housing, Health" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="difficulty">Difficulty</label>
+                  <select id="difficulty" name="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="question_text">Question</label>
+                  <textarea id="question_text" name="question_text" rows="3" class="input"></textarea>
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="choices">Choices (one per line)</label>
+                  <textarea id="choices" name="choices" rows="4" class="input"></textarea>
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="correct_answer">Correct answer (copy one option)</label>
+                  <input id="correct_answer" name="correct_answer" class="input" />
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="explanation">Explanation (optional)</label>
+                  <textarea id="explanation" name="explanation" rows="2" class="input"></textarea>
+                </div>
+                <div class="form-field" style="display:flex;align-items:center;gap:0.4rem;">
+                  <input id="is_published" name="is_published" type="checkbox" checked />
+                  <label for="is_published" class="form-label" style="margin-bottom:0;">Published</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Save question</button>
+              </form>
+
+              <h2 style="margin-top:1.5rem;font-size:1rem;">Latest questions</h2>
+              <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+                  <thead>
+                    <tr>
+                      <th style="text-align:left;border-bottom:1px solid #e5e7eb;padding:0.3rem;">Skill</th>
+                      <th style="text-align:left;border-bottom:1px solid #e5e7eb;padding:0.3rem;">Category</th>
+                      <th style="text-align:left;border-bottom:1px solid #e5e7eb;padding:0.3rem;">Question</th>
+                      <th style="text-align:left;border-bottom:1px solid #e5e7eb;padding:0.3rem;">Difficulty</th>
+                      <th style="text-align:left;border-bottom:1px solid #e5e7eb;padding:0.3rem;">Published</th>
+                    </tr>
+                  </thead>
+                  <tbody id="editor-questions"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="footer-title">DutchExam</div>
+      <p>Practice Dutch Reading &amp; KNM for the integration exam. Quick diagnostic tests, clear feedback.</p>
+    </div>
+    <div>
+      <div class="footer-title">Product</div>
+      <a href="/tests/quick.html">Quick test</a>
+      <a href="/tests/deep.html">Deep test</a>
+      <span class="tag-soon">Full exam &mdash; soon</span>
+    </div>
+    <div>
+      <div class="footer-title">Company</div>
+      <a href="/about.html">About</a>
+      <a href="/faq.html">FAQ</a>
+    </div>
+    <div>
+      <div class="footer-title">Legal</div>
+      <a href="/terms.html">Terms of use</a>
+      <a href="/privacy.html">Privacy policy</a>
+      <a href="/cookies.html">Cookies</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+  </body>
+</html>
