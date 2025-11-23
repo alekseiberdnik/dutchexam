@@ -1,6 +1,6 @@
-# DutchExam.online &mdash; MVP frontend
+# DutchExam &mdash; MVP frontend
 
-DutchExam.online is a small SaaS-style project that helps learners prepare for the Dutch
+DutchExam is a small SaaS-style project that helps learners prepare for the Dutch
 integration exam (inburgering), starting with **Reading (Lezen)** and **Knowledge of Dutch Society (KNM)**.
 
 This repository contains the **static frontend MVP**:
@@ -32,7 +32,7 @@ No build step is required: everything is served as static files.
 ```text
 /
 ├─ index.html               # Landing page
-├─ about.html               # About DutchExam.online
+├─ about.html               # About DutchExam
 ├─ faq.html                 # FAQ for learners
 ├─ terms.html               # Terms of use
 ├─ privacy.html             # Privacy Policy
